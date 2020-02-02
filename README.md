@@ -17,7 +17,7 @@ jobs:
   cancel:
     uses: styfle/cancel-workflow-action@v1
     with:
-      workflow_id: 435869
+      workflow_id: 479426
       access_token: ${{ secrets.GH_ACCESS_TOKEN }}
 ```
 
