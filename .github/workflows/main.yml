@@ -10,7 +10,8 @@ jobs:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Root
+      - name: Test Step
         uses: ./ # Uses an action in the root directory
         with:
           workflow-name: 'continuous-integration.yml'
+          access-token: 'ABC123'
