@@ -12,7 +12,7 @@ async function main() {
   const octokit = new github.GitHub(token);
   const { data } = await octokit.actions.listWorkflowRuns({ owner, repo, workflow_id });
   console.log(`Found ${data.total_count} runs total.`);
-  console.log(data);
+  console.log('data', data);
   const others = data.workflow_runs.filter(
     o => o.head_branch === branch && o.head_sha !== sha && o.status !== 'completed'
   );
