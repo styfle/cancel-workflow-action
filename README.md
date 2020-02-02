@@ -8,6 +8,8 @@ This includes runs with a [status](https://developer.github.com/v3/checks/runs/#
 
 When you `git push`, this action will capture the branch name and SHA. It will query GitHub's API to find workflow runs that match the branch but do not match the SHA (these would be previous pushes) and cancel all of these in progresses runs so that the latest run is the only one.
 
+Read more about the [Workflow Runs API](https://developer.github.com/v3/actions/workflow_runs/).
+
 ## Usage
 
 - Visit https://github.com/settings/tokens to generate a token with `public_repo` scope (or full `repo` scope for private repos).
