@@ -7,6 +7,5 @@ jobs:
     runs-on: ubuntu-latest
     name: Task
     steps:
-      - name: Sleep
-        uses: actions/setup-node@v1
-        run: echo 'Sleeping...'; sleep 60; echo 'Done.';
+      - uses: actions/setup-node@v1
+      - run: echo 'Sleeping...'; sleep 120; echo 'Done.';
