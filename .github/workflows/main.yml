@@ -8,7 +8,7 @@ jobs:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Hello World Step
+      - name: Root
         uses: ./ # Uses an action in the root directory
         with:
-          who-to-greet: 'Mona the Octocat'
+          workflow-name: 'continuous-integration.yml'
