@@ -2,12 +2,12 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 try {
+  const { eventName, sha, ref, repo } = github.context;
   const workflow = core.getInput('workflow-name');
-  console.log(`Found input ${workflow}!`);
-  // Get the JSON webhook payload for the event that triggered the workflow
-  delete github.context.payload;
-  const payload = JSON.stringify(github.context, undefined, 2)
-  console.log(`The event payload: ${payload}`);
+  const token = core.getInput('access-token');
+  console.log(`Found input: ${workflow}`);
+  console.log(`Found token: ${token ? 'yes' : 'no'}`);
+  console.log({ eventName, sha, ref, repo });
 } catch (error) {
   core.setFailed(error.message);
 }
