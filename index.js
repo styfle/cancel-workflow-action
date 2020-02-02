@@ -8262,7 +8262,6 @@ module.exports = function btoa(str) {
 
 const core = __webpack_require__(470);
 const github = __webpack_require__(469);
-const statusSet = new Set(['queued', 'in_progress']);
 
 async function main() {
   const { eventName, sha, ref, repo: { owner, repo } } = github.context;
@@ -8270,13 +8269,13 @@ async function main() {
   console.log({ eventName, sha, branch, owner, repo });
   const workflow_id = core.getInput('workflow-name', { required: true });
   const token = core.getInput('access-token', { required: true });
-  console.log(`Found input: ${workflow}`);
+  console.log(`Found input: ${workflow_id}`);
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
   const octokit = new github.GitHub(token);
   const { data } = await octokit.actions.listWorkflowRuns({ workflow_id });
   console.log(`Found ${data.total_count} runs total.`);
   const others = data.workflow_runs.filter(
-    o => o.head_branch === branch && o.head_sha !== sha && statusSet.has(o.status)
+    o => o.head_branch === branch && o.head_sha !== sha && o.status !== 'completed'
   );
   console.log(`Found ${others.length} runs in progress.`);
   for (const { id, head_sha, status } of others) {
