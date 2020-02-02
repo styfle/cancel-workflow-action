@@ -1,25 +1,29 @@
-# Hello world javascript action
+# Cancel In-Progress Workflow Runs
 
-This action prints "Hello World" or "Hello" + the name of a person to greet to the log.
+This action will cancel any queued or in-progress jobs for a given workflow.
 
-## Inputs
-
-### `who-to-greet`
-
-**Required** The name of the person to greet. Default `"World"`.
-
-## Outputs
-
-### `time`
-
-The time we greeted you.
 
 ## Example usage
 
-uses: actions/hello-world-javascript-action@v1
-with:
-  who-to-greet: 'Mona the Octocat'
+Generate a personal access token with `public_repo`.
+
+Then add a secret called `GH_ACCESS_TOKEN` to your repository.
+
+```yml
+name: Cancel
+on: [push]
+jobs:
+  cancel:
+    uses: styfle/cancel-workflow-action@v1
+    with:
+      workflow_id: 'continuous-integration.yml'
+      access_token: ${{ secrets.GH_ACCESS_TOKEN }}
+```
 
 ## Contributing
 
-Make changes to `index.js` and execute `npm run build` to generate the `dist` directory.
+- Clone this repo
+- Run `yarn install`
+- Edit `./src/index.js`
+- Run `yarn build`
+- Commit changes including `./index.js` bundle
