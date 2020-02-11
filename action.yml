@@ -1,13 +1,12 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Cancel workflow action'
+description: 'Cancel previous workflows'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  workflow_id:
+    description: 'The id of your workflow'
     required: true
-    default: 'World'
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  access_token:
+    description: 'Your github access token, ie: secrets.GITHUB_TOKEN'
+    required: true
 runs:
   using: 'node12'
   main: 'index.js'
