@@ -6,7 +6,7 @@ This includes runs with a [status](https://developer.github.com/v3/checks/runs/#
 
 ## How does it work?
 
-When you `git push`, this action will capture the branch name and SHA. It will query GitHub's API to find workflow runs that match the branch but do not match the SHA (these would be previous pushes) and cancel all of these in progresses runs so that the latest run is the only one.
+When you `git push`, this action will capture the Branch and SHA. It will query GitHub's API to find workflow runs that match the Branch but do not match the SHA (these would be previous pushes) and cancel all of these in-progress runs so that the latest run (current SHA) will finish.
 
 Read more about the [Workflow Runs API](https://developer.github.com/v3/actions/workflow_runs/).
 
@@ -27,11 +27,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - uses: styfle/cancel-workflow-action@master
+      - uses: styfle/cancel-workflow-action@0.2.0
         with:
           workflow_id: 479426
-          access_token: ${{ secrets.GITHUB_WORKFLOW_TOKEN }}
+          access_token: ${{ secrets.GH_ACCESS_TOKEN }}
 ```
+
+At the time of writing `0.2.0` is the latest release but you can select any [release](https://github.com/styfle/cancel-workflow-action/releases).
 
 ## Contributing
 
