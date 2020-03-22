@@ -1,6 +1,13 @@
 import core from '@actions/core';
 import github from '@actions/github';
 
+if (!core) {
+  throw new Error('Module not found: core');
+}
+if (!github) {
+  throw new Error('Module not found: github');
+}
+
 async function main() {
   const { eventName, sha, ref, repo: { owner, repo }, payload } = github.context;
   let branch = ref.slice(11);
