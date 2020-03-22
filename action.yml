@@ -1,11 +1,15 @@
-name: 'Cancel workflow action'
-description: 'Cancel previous workflows'
+name: 'Cancel Workflow Action'
+description: 'This Action will cancel any previous runs that are not `completed` for a given workflow.'
+author: styfle
+branding:
+  icon: 'stop-circle'  
+  color: 'white'
 inputs:
   workflow_id:
-    description: 'The comma separated ids of your workflows'
+    description: 'A single Workflow ID or a comma separated list of IDs'
     required: true
   access_token:
-    description: 'Your github access token, ie: secrets.GITHUB_TOKEN'
+    description: 'Your GitHub Access Token, ie: secrets.GITHUB_TOKEN'
     required: true
 runs:
   using: 'node12'
