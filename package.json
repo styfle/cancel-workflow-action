@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "ncc build src/index.ts -o ./"
+    "build": "ncc build src/index.ts && mv dist/index.js index.js"
   },
   "dependencies": {
     "@actions/core": "^1.2.3",
