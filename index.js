@@ -4131,20 +4131,24 @@ isStream.transform = function (stream) {
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __importDefault(__webpack_require__(470));
-const github_1 = __importDefault(__webpack_require__(469));
-if (!core_1.default) {
-    throw new Error('Module not found: core');
-}
-if (!github_1.default) {
+const core = __importStar(__webpack_require__(470));
+const github = __importStar(__webpack_require__(469));
+if (!github) {
     throw new Error('Module not found: github');
 }
+if (!core) {
+    throw new Error('Module not found: core');
+}
 async function main() {
-    const { eventName, sha, ref, repo: { owner, repo }, payload } = github_1.default.context;
+    const { eventName, sha, ref, repo: { owner, repo }, payload } = github.context;
     let branch = ref.slice(11);
     let headSha = sha;
     if (payload.pull_request) {
@@ -4152,12 +4156,12 @@ async function main() {
         headSha = payload.pull_request.head.sha;
     }
     console.log({ eventName, sha, headSha, branch, owner, repo });
-    const workflow_id = core_1.default.getInput('workflow_id', { required: true });
+    const workflow_id = core.getInput('workflow_id', { required: true });
     const workflow_ids = workflow_id.replace(/\s/g, '').split(',').map(s => Number(s));
-    const token = core_1.default.getInput('access_token', { required: true });
+    const token = core.getInput('access_token', { required: true });
     console.log(`Found input: ${workflow_id}`);
     console.log(`Found token: ${token ? 'yes' : 'no'}`);
-    const octokit = new github_1.default.GitHub(token);
+    const octokit = new github.GitHub(token);
     await Promise.all(workflow_ids.map(async (workflow_id) => {
         try {
             const { data } = await octokit.actions.listWorkflowRuns({
@@ -4187,8 +4191,8 @@ async function main() {
     console.log('Done.');
 }
 main()
-    .then(() => core_1.default.info('Cancel Complete.'))
-    .catch(e => core_1.default.setFailed(e.message));
+    .then(() => core.info('Cancel Complete.'))
+    .catch(e => core.setFailed(e.message));
 
 
 /***/ }),
