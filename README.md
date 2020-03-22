@@ -33,7 +33,7 @@ jobs:
           access_token: ${{ secrets.GH_ACCESS_TOKEN }}
 ```
 
-`workflow_id` accepts a comma separated list of IDs
+Note: `workflow_id` accepts a comma separated list of IDs.
 
 At the time of writing `0.2.0` is the latest release but you can select any [release](https://github.com/styfle/cancel-workflow-action/releases).
 
@@ -41,6 +41,6 @@ At the time of writing `0.2.0` is the latest release but you can select any [rel
 
 - Clone this repo
 - Run `yarn install`
-- Edit `./src/index.js`
+- Edit `./src/index.ts`
 - Run `yarn build`
-- Commit changes including `./index.js` bundle
+- Commit changes including `./dist/index.js` bundle

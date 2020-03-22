@@ -1,5 +1,5 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
+import core from '@actions/core';
+import github from '@actions/github';
 
 async function main() {
   const { eventName, sha, ref, repo: { owner, repo }, payload } = github.context;
@@ -12,7 +12,7 @@ async function main() {
 
   console.log({ eventName, sha, headSha, branch, owner, repo });
   const workflow_id = core.getInput('workflow_id', { required: true });
-  const workflow_ids = workflow_id.replace(/\s/g, '').split(',');
+  const workflow_ids = workflow_id.replace(/\s/g, '').split(',').map(s => Number(s));
   const token = core.getInput('access_token', { required: true });
   console.log(`Found input: ${workflow_id}`);
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
