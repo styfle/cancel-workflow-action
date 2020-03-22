@@ -33,7 +33,7 @@ jobs:
           access_token: ${{ secrets.GH_ACCESS_TOKEN }}
 ```
 
-Note: `workflow_id` accepts a comma separated list of IDs.
+_Note_: `workflow_id` accepts a comma separated list of IDs.
 
 At the time of writing `0.2.0` is the latest release but you can select any [release](https://github.com/styfle/cancel-workflow-action/releases).
 
