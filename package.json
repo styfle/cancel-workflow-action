@@ -1,10 +1,10 @@
 {
   "name": "cancel-workflow-action",
   "version": "0.2.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "ncc build src/index.ts && mv dist/index.js index.js"
+    "build": "ncc build src/index.ts -o dist"
   },
   "dependencies": {
     "@actions/core": "^1.2.3",
