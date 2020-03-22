@@ -2,19 +2,19 @@
 # yarn lockfile v1
 
 
-"@actions/core@^1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@actions/core/-/core-1.2.2.tgz#3c4848d50378f9e3bcb67bcf97813382ec7369ee"
-  integrity sha512-IbCx7oefq+Gi6FWbSs2Fnw8VkEI6Y4gvjrYprY3RV//ksq/KPMlClOerJ4jRosyal6zkUIc8R9fS/cpRMlGClg==
+"@actions/core@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@actions/core/-/core-1.2.3.tgz#e844b4fa0820e206075445079130868f95bfca95"
+  integrity sha512-Wp4xnyokakM45Uuj4WLUxdsa8fJjKVl1fDTsPbTEcTcuu0Nb26IPQbOtjmnfaCPGcaoPOOqId8H9NapZ8gii4w==
 
-"@actions/github@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@actions/github/-/github-2.1.0.tgz#ca36cfb146b4c8955f3d5f88d8dde5f89194de21"
-  integrity sha512-G4ncMlh4pLLAvNgHUYUtpWQ1zPf/VYqmRH9oshxLabdaOOnp7i1hgSgzr2xne2YUaSND3uqemd3YYTIsm2f/KQ==
+"@actions/github@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@actions/github/-/github-2.1.1.tgz#bcabedff598196d953f58ba750d5e75549a75142"
+  integrity sha512-kAgTGUx7yf5KQCndVeHSwCNZuDBvPyxm5xKTswW2lofugeuC1AZX73nUUVDNaysnM9aKFMHv9YCdVJbg7syEyA==
   dependencies:
     "@actions/http-client" "^1.0.3"
     "@octokit/graphql" "^4.3.1"
-    "@octokit/rest" "^16.15.0"
+    "@octokit/rest" "^16.43.1"
 
 "@actions/http-client@^1.0.3":
   version "1.0.3"
@@ -60,10 +60,10 @@
   resolved "https://registry.yarnpkg.com/@octokit/plugin-request-log/-/plugin-request-log-1.0.0.tgz#eef87a431300f6148c39a7f75f8cfeb218b2547e"
   integrity sha512-ywoxP68aOT3zHCLgWZgwUJatiENeHE7xJzYjfz8WI0goynp96wETBF+d95b8g/uL4QmS6owPVlaxiz3wyMAzcw==
 
-"@octokit/plugin-rest-endpoint-methods@2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-2.2.0.tgz#17778b3b79f6dd978d8854ad81afeb239fae9da2"
-  integrity sha512-/Es7P4roLJls+4JaUUouZ25dqvXdrLJ80vvRoZzzR0EBCTlaU2ESRjXgH50mUpmR1MKPwJS3Ew5iFj3U3Q8UfQ==
+"@octokit/plugin-rest-endpoint-methods@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-2.4.0.tgz#3288ecf5481f68c494dd0602fc15407a59faf61e"
+  integrity sha512-EZi/AWhtkdfAYi01obpX0DF7U6b1VRr30QNQ5xSFPITMdLSfhcBqjamE3F+sKcxPbD7eZuMHu3Qkk2V+JGxBDQ==
   dependencies:
     "@octokit/types" "^2.0.1"
     deprecation "^2.3.1"
@@ -91,15 +91,15 @@
     once "^1.4.0"
     universal-user-agent "^4.0.0"
 
-"@octokit/rest@^16.15.0":
-  version "16.41.1"
-  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-16.41.1.tgz#885609acbc2d2118eaadf017f92ca503d352a84b"
-  integrity sha512-C97cb2cwxakAxZ+5oIAhmd9a1lqJ48n9TN3ooRuuifRMVQZGJCIFsb7uQV76YjDsB1agjhhDokAOSKq5F2+HYw==
+"@octokit/rest@^16.43.1":
+  version "16.43.1"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-16.43.1.tgz#3b11e7d1b1ac2bbeeb23b08a17df0b20947eda6b"
+  integrity sha512-gfFKwRT/wFxq5qlNjnW2dh+qh74XgTQ2B179UX5K1HYCluioWj8Ndbgqw2PVqa1NnVJkGHp2ovMpVn/DImlmkw==
   dependencies:
     "@octokit/auth-token" "^2.4.0"
     "@octokit/plugin-paginate-rest" "^1.1.1"
     "@octokit/plugin-request-log" "^1.0.0"
-    "@octokit/plugin-rest-endpoint-methods" "2.2.0"
+    "@octokit/plugin-rest-endpoint-methods" "2.4.0"
     "@octokit/request" "^5.2.0"
     "@octokit/request-error" "^1.0.2"
     atob-lite "^2.0.0"
@@ -316,6 +316,11 @@ tunnel@0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/tunnel/-/tunnel-0.0.6.tgz#72f1314b34a5b192db012324df2cc587ca47f92c"
   integrity sha512-1h/Lnq9yajKY2PEbBadPXj3VxsDDu844OnaAo52UVmIzIvwwtBPIuNvkjuzBlTWpfJyUbG3ez0KSBibQkj4ojg==
+
+typescript@^3.8.3:
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
+  integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
 
 universal-user-agent@^4.0.0:
   version "4.0.0"

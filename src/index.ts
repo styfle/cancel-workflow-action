@@ -1,5 +1,13 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
+import * as core from '@actions/core';
+import * as github from '@actions/github';
+
+if (!github) {
+  throw new Error('Module not found: github');
+}
+
+if (!core) {
+  throw new Error('Module not found: core');
+}
 
 async function main() {
   const { eventName, sha, ref, repo: { owner, repo }, payload } = github.context;
@@ -12,7 +20,7 @@ async function main() {
 
   console.log({ eventName, sha, headSha, branch, owner, repo });
   const workflow_id = core.getInput('workflow_id', { required: true });
-  const workflow_ids = workflow_id.replace(/\s/g, '').split(',');
+  const workflow_ids = workflow_id.replace(/\s/g, '').split(',').map(s => Number(s));
   const token = core.getInput('access_token', { required: true });
   console.log(`Found input: ${workflow_id}`);
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
