@@ -4137,6 +4137,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __importDefault(__webpack_require__(470));
 const github_1 = __importDefault(__webpack_require__(469));
+if (!core_1.default) {
+    throw new Error('Module not found: core');
+}
+if (!github_1.default) {
+    throw new Error('Module not found: github');
+}
 async function main() {
     const { eventName, sha, ref, repo: { owner, repo }, payload } = github_1.default.context;
     let branch = ref.slice(11);
