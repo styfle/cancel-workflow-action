@@ -43,4 +43,4 @@ At the time of writing `0.2.0` is the latest release but you can select any [rel
 - Run `yarn install`
 - Edit `./src/index.ts`
 - Run `yarn build`
-- Commit changes including `./index.js` bundle
+- Commit changes including `./dist/index.js` bundle
