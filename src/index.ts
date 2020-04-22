@@ -21,6 +21,7 @@ async function main() {
 
     // console.log({eventName, sha, headSha, branch, owner, repo});
     const token = core.getInput('access_token', {required: true});
+    const runNumber: number = Number(core.getInput('run_number', {required: true}));
     console.log(`Found token: ${token ? 'yes' : 'no'}`);
     const octokit = new github.GitHub(token);
 
@@ -44,7 +45,8 @@ async function main() {
     const runningWorkflows = runs.workflow_runs.filter(
         run => run.head_sha !== headSha && // PR смотрит на другой коммит
             run.status !== 'completed' &&  // PR не собран
-            run.pull_requests.some(pr => pr.number === pull_request.number)
+            run.pull_requests.some(pr => pr.number === pull_request.number) &&
+            run.run_number < runNumber
     );
     console.log(`Found ${runningWorkflows.length} runs in progress.`);
     for (const {id, head_sha, status} of runningWorkflows) {

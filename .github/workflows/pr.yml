@@ -8,6 +8,7 @@ jobs:
       - uses: avdeev-dima-tutu/cancel-workflow-action@master
         with:
           access_token: "${{ secrets.GITHUB_TOKEN }}"
+          run_number: "${{ github.run_number }}"
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' #todo delete
       - uses: actions/checkout@v2

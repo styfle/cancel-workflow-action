@@ -296,9 +296,9 @@ module.exports = require("tls");
 /***/ }),
 
 /***/ 18:
-/***/ (function(module) {
+/***/ (function() {
 
-module.exports = eval("require")("encoding");
+eval("require")("encoding");
 
 
 /***/ }),
@@ -4157,6 +4157,7 @@ async function main() {
     const branch = github.context.payload.pull_request.head.ref;
     const headSha = github.context.payload.pull_request.head.sha;
     const token = core.getInput('access_token', { required: true });
+    const runNumber = Number(core.getInput('run_number', { required: true }));
     console.log(`Found token: ${token ? 'yes' : 'no'}`);
     const octokit = new github.GitHub(token);
     const allWorkflows = await octokit.actions.listRepoWorkflows({
@@ -4177,7 +4178,8 @@ async function main() {
     const pull_request = github.context.payload.pull_request;
     const runningWorkflows = runs.workflow_runs.filter(run => run.head_sha !== headSha &&
         run.status !== 'completed' &&
-        run.pull_requests.some(pr => pr.number === pull_request.number));
+        run.pull_requests.some(pr => pr.number === pull_request.number) &&
+        run.run_number < runNumber);
     console.log(`Found ${runningWorkflows.length} runs in progress.`);
     for (const { id, head_sha, status } of runningWorkflows) {
         try {
