@@ -1,6 +1,6 @@
 {
-  "name": "cancel-workflow-action",
-  "version": "0.3.1",
+  "name": "cancel-previous-pull-request",
+  "version": "1.0.0",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {

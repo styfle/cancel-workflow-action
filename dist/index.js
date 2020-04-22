@@ -296,9 +296,9 @@ module.exports = require("tls");
 /***/ }),
 
 /***/ 18:
-/***/ (function() {
+/***/ (function(module) {
 
-eval("require")("encoding");
+module.exports = eval("require")("encoding");
 
 
 /***/ }),
@@ -4148,46 +4148,52 @@ if (!core) {
     throw new Error('Module not found: core');
 }
 async function main() {
-    const { eventName, sha, ref, repo: { owner, repo }, payload } = github.context;
-    let branch = ref.slice(11);
-    let headSha = sha;
-    if (payload.pull_request) {
-        branch = payload.pull_request.head.ref;
-        headSha = payload.pull_request.head.sha;
+    console.log("hello TypeScript");
+    const { repo: { owner, repo } } = github.context;
+    if (!github.context.payload.pull_request) {
+        console.error("Action available only at pull_request");
+        return;
     }
-    console.log({ eventName, sha, headSha, branch, owner, repo });
-    const workflow_id = core.getInput('workflow_id', { required: true });
-    const workflow_ids = workflow_id.replace(/\s/g, '').split(',').map(s => Number(s));
+    const branch = github.context.payload.pull_request.head.ref;
+    const headSha = github.context.payload.pull_request.head.sha;
     const token = core.getInput('access_token', { required: true });
-    console.log(`Found input: ${workflow_id}`);
     console.log(`Found token: ${token ? 'yes' : 'no'}`);
     const octokit = new github.GitHub(token);
-    await Promise.all(workflow_ids.map(async (workflow_id) => {
+    const allWorkflows = await octokit.actions.listRepoWorkflows({
+        owner: owner,
+        repo: repo
+    });
+    const workflow = allWorkflows.data.workflows.find(wf => wf.name === github.context.workflow);
+    if (workflow === undefined) {
+        console.error(`can't find workflow ${github.context.workflow}`);
+        return;
+    }
+    const runs = (await octokit.actions.listWorkflowRuns({
+        owner,
+        repo,
+        workflow_id: workflow.id,
+        branch
+    })).data;
+    const pull_request = github.context.payload.pull_request;
+    const runningWorkflows = runs.workflow_runs.filter(run => run.head_sha !== headSha &&
+        run.status !== 'completed' &&
+        run.pull_requests.some(pr => pr.number === pull_request.number));
+    console.log(`Found ${runningWorkflows.length} runs in progress.`);
+    for (const { id, head_sha, status } of runningWorkflows) {
         try {
-            const { data } = await octokit.actions.listWorkflowRuns({
+            console.log('Cancelling another run: ', { id, head_sha, status });
+            const res = await octokit.actions.cancelWorkflowRun({
                 owner,
                 repo,
-                workflow_id,
-                branch
+                run_id: id
             });
-            console.log(`Found ${data.total_count} runs total.`);
-            const runningWorkflows = data.workflow_runs.filter(workflow => workflow.head_sha !== headSha && workflow.status !== 'completed');
-            console.log(`Found ${runningWorkflows.length} runs in progress.`);
-            for (const { id, head_sha, status } of runningWorkflows) {
-                console.log('Cancelling another run: ', { id, head_sha, status });
-                const res = await octokit.actions.cancelWorkflowRun({
-                    owner,
-                    repo,
-                    run_id: id
-                });
-                console.log(`Status ${res.status}`);
-            }
+            console.log(`Status ${res.status}`);
         }
         catch (e) {
             const msg = e.message || e;
-            console.log(`Error while cancelling workflow_id ${workflow_id}: ${msg}`);
+            console.log(`Error while cancelling workflow_id ${workflow.id}: ${msg}`);
         }
-    }));
+    }
     console.log('Done.');
 }
 main()

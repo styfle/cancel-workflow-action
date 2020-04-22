@@ -1,0 +1,19 @@
+name: Pull Request Workflow Cancel Example
+on: [pull_request]
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: avdeev-dima-tutu/cancel-workflow-action@master
+        with:
+          access_token: "${{ secrets.GITHUB_TOKEN }}"
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' #todo delete
+      - uses: actions/checkout@v2
+      - run: echo 'Running now'
+      - run: sleep 10
+      - run: sleep 10
+      - run: sleep 10
+      - run: sleep 10
+      - run: echo 'wasnt cancelled'
