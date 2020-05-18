@@ -15,4 +15,4 @@ jobs:
         uses: ./ # Uses an action in the root directory
         with:
           workflow_id: 479426, 830809
-          access_token: ${{ secrets.GH_ACCESS_TOKEN }}
+          access_token: ${{ github.token }}
