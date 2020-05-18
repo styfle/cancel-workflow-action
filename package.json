@@ -7,11 +7,11 @@
     "build": "ncc build src/index.ts -o dist"
   },
   "dependencies": {
-    "@actions/core": "^1.2.3",
-    "@actions/github": "^2.1.1"
+    "@actions/core": "^1.2.4",
+    "@actions/github": "^2.2.0"
   },
   "devDependencies": {
-    "@zeit/ncc": "^0.21.0",
-    "typescript": "^3.8.3"
+    "@zeit/ncc": "^0.22.2",
+    "typescript": "^3.9.2"
   }
 }
