@@ -10,6 +10,7 @@ if (!core) {
 }
 
 async function main() {
+  console.log({context: github.context});
   const { eventName, sha, ref, repo: { owner, repo }, payload } = github.context;
   let branch = ref.slice(11);
   let headSha = sha;
@@ -19,10 +20,13 @@ async function main() {
   }
 
   console.log({ eventName, sha, headSha, branch, owner, repo });
-  const workflow_id = core.getInput('workflow_id', { required: true });
+  const workflow_id = core.getInput('workflow_id', { required: false });
+  /*if (!workflow_id) {
+    process.env.GITHUB_RUN_ID
+  }*/
   const workflow_ids = workflow_id.replace(/\s/g, '').split(',').map(s => Number(s));
   const token = core.getInput('access_token', { required: true });
-  console.log(`Found input: ${workflow_id}`);
+  console.log(`Found workflow_id: ${workflow_id}`);
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
   const octokit = new github.GitHub(token);
 
