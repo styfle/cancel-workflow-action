@@ -10,7 +10,7 @@ if (!core) {
 }
 
 async function main() {
-  console.log({context: github.context});
+  console.log({ context: github.context });
   const { eventName, sha, ref, repo: { owner, repo }, payload } = github.context;
   let branch = ref.slice(11);
   let headSha = sha;
