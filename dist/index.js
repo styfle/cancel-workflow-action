@@ -4237,6 +4237,9 @@ if (!core) {
     throw new Error('Module not found: core');
 }
 async function main() {
+    console.log({ action: github.context.action });
+    console.log({ actor: github.context.actor });
+    console.log({ payload: github.context.payload });
     const { eventName, sha, ref, repo: { owner, repo }, payload } = github.context;
     let branch = ref.slice(11);
     let headSha = sha;
@@ -4245,10 +4248,10 @@ async function main() {
         headSha = payload.pull_request.head.sha;
     }
     console.log({ eventName, sha, headSha, branch, owner, repo });
-    const workflow_id = core.getInput('workflow_id', { required: true });
+    const workflow_id = core.getInput('workflow_id', { required: false });
     const workflow_ids = workflow_id.replace(/\s/g, '').split(',').map(s => Number(s));
     const token = core.getInput('access_token', { required: true });
-    console.log(`Found input: ${workflow_id}`);
+    console.log(`Found workflow_id: ${workflow_id}`);
     console.log(`Found token: ${token ? 'yes' : 'no'}`);
     const octokit = new github.GitHub(token);
     await Promise.all(workflow_ids.map(async (workflow_id) => {
