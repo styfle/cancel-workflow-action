@@ -12,7 +12,7 @@ if (!core) {
 async function main() {
   const { eventName, sha, ref, repo: { owner, repo }, payload } = github.context;
   const { GITHUB_RUN_ID } = process.env;
-  
+
   let branch = ref.slice(11);
   let headSha = sha;
   if (payload.pull_request) {
@@ -49,7 +49,7 @@ async function main() {
 
   await Promise.all(workflow_ids.map(async (workflow_id) => {
     try {
-      const {data} = await octokit.actions.listWorkflowRuns({
+      const { data } = await octokit.actions.listWorkflowRuns({
         owner,
         repo,
         workflow_id,
@@ -67,15 +67,13 @@ async function main() {
           repo,
           run_id: id
         });
-        console.log(`Status ${res.status}`);
+        console.log(`Cancel run ${id} responded with status ${res.status}`);
       }
     } catch (e) {
       const msg = e.message || e;
       console.log(`Error while cancelling workflow_id ${workflow_id}: ${msg}`);
     }
   }));
-
-  console.log('Done.');
 }
 
 main()
