@@ -12,6 +12,7 @@ if (!core) {
 async function main() {
   const { eventName, sha, ref, repo: { owner, repo }, payload } = github.context;
   const { GITHUB_RUN_ID } = process.env;
+  
   let branch = ref.slice(11);
   let headSha = sha;
   if (payload.pull_request) {
