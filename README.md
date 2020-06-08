@@ -32,6 +32,8 @@ jobs:
 
 ### Advanced
 
+In some cases, you may wish to avoid modifying all your workflows and instead create a new workflow that cancels your other workflows.
+
 - Visit `https://api.github.com/repos/:org/:repo/actions/workflows` to find the Workflow ID you wish to auto-cancel.
 - Add a new file `.github/workflows/cancel.yml` with the following:
 
