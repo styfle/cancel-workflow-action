@@ -2953,7 +2953,7 @@ async function main() {
                     repo,
                     run_id: id
                 });
-                console.log(`Status ${res.status}`);
+                console.log(`Cancel run ${id} responded with status ${res.status}`);
             }
         }
         catch (e) {
@@ -2961,7 +2961,6 @@ async function main() {
             console.log(`Error while cancelling workflow_id ${workflow_id}: ${msg}`);
         }
     }));
-    console.log('Done.');
 }
 main()
     .then(() => core.info('Cancel Complete.'))
