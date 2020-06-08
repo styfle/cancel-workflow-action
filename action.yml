@@ -6,8 +6,8 @@ branding:
   color: 'white'
 inputs:
   workflow_id:
-    description: 'A single Workflow ID or a comma separated list of IDs'
-    required: true
+    description: 'Optional - A single Workflow ID or a comma separated list of IDs'
+    required: false
   access_token:
     description: 'Your GitHub Access Token, ie: {{ github.token }}'
     required: true

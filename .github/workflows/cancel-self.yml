@@ -1,0 +1,17 @@
+name: Cancel Self
+
+on: [push]
+
+jobs:
+  task:
+    runs-on: ubuntu-latest
+    name: Task
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Test Step
+        uses: ./ # Uses an action in the root directory
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/setup-node@v1
+      - run: echo 'Sleeping...'; sleep 120; echo 'Done.';

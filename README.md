@@ -12,9 +12,30 @@ Read more about the [Workflow Runs API](https://developer.github.com/v3/actions/
 
 ## Usage
 
+Typically, you will want to add this action as the first step in a workflow so it can cancel itself on the next push.
+
+```yml
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.3.1
+        with:
+          access_token: ${{ github.token }}
+      #- name: Run Tests
+      #  uses: actions/setup-node@v1
+      #  run: node test.js
+      # ... etc
+```
+
+
+### Advanced
+
+In some cases, you may wish to avoid modifying all your workflows and instead create a new workflow that cancels your other workflows.
+
 - Visit `https://api.github.com/repos/:org/:repo/actions/workflows` to find the Workflow ID you wish to auto-cancel.
 - Add a new file `.github/workflows/cancel.yml` with the following:
-
 
 ```yml
 name: Cancel
