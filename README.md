@@ -1,6 +1,6 @@
 # Cancel Workflow Action
 
-This is a Github Action that will cancel any previous runs that are not `completed` for a given workflow.
+This is a GitHub Action that will cancel any previous runs that are not `completed` for a given workflow.
 
 This includes runs with a [status](https://developer.github.com/v3/checks/runs/#parameters-1) of `queued` or `in_progress`.
 
