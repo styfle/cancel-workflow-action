@@ -20,6 +20,21 @@ async function main() {
     headSha = payload.pull_request.head.sha;
   }
 
+  // Allow users to specify a branch to ignore
+  // This is useful, if you want to always run tests on master, but prevent parallel testing on PR's
+  let ignoredBranches = core.getInput('ignored_branches');
+  let ignoredBranchNames: string[] = [];
+  if (ignoredBranches) {
+    // The user may specify multiple branches, separated by commas
+    ignoredBranches.split(',')
+      .forEach(branchName => ignoredBranchNames.push(branchName));
+
+    if (ignoredBranchNames.includes(branch)) {
+      console.log(`Don't run on ignored branch ${branchName}`);
+      return;
+    }
+  }
+
   console.log({ eventName, sha, headSha, branch, owner, repo, GITHUB_RUN_ID });
   const token = core.getInput('access_token', { required: true });
   const workflow_id = core.getInput('workflow_id', { required: false });

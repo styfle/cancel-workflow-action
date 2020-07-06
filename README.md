@@ -49,10 +49,12 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.4.0
         with:
           workflow_id: 479426
+          ignored_branches: master,staging
           access_token: ${{ github.token }}
 ```
 
 _Note_: `workflow_id` accepts a comma separated list of IDs.
+_Note_: `ignored_branches` accepts a comma separated list of IDs. The script won't run on these branches.
 
 At the time of writing `0.4.0` is the latest release but you can select any [release](https://github.com/styfle/cancel-workflow-action/releases).
 
