@@ -2944,7 +2944,7 @@ async function main() {
                 branch
             });
             console.log(`Found ${data.total_count} runs total.`);
-            const runningWorkflows = data.workflow_runs.filter(workflow => workflow.head_sha !== headSha && workflow.status !== 'completed');
+            const runningWorkflows = data.workflow_runs.filter(workflow => workflow.head_branch === branch && workflow.head_sha !== headSha && workflow.status !== 'completed');
             console.log(`Found ${runningWorkflows.length} runs in progress.`);
             for (const { id, head_sha, status } of runningWorkflows) {
                 console.log('Cancelling another run: ', { id, head_sha, status });

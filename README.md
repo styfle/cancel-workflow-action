@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.4.0
+        uses: styfle/cancel-workflow-action@0.4.1
         with:
           access_token: ${{ github.token }}
       #- name: Run Tests
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - uses: styfle/cancel-workflow-action@0.4.0
+      - uses: styfle/cancel-workflow-action@0.4.1
         with:
           workflow_id: 479426
           access_token: ${{ github.token }}
@@ -54,7 +54,7 @@ jobs:
 
 _Note_: `workflow_id` accepts a comma separated list of IDs.
 
-At the time of writing `0.4.0` is the latest release but you can select any [release](https://github.com/styfle/cancel-workflow-action/releases).
+At the time of writing `0.4.1` is the latest release but you can select any [release](https://github.com/styfle/cancel-workflow-action/releases).
 
 ## Contributing
 
