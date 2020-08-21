@@ -23,6 +23,14 @@ async function main() {
   console.log({ eventName, sha, headSha, branch, owner, repo, GITHUB_RUN_ID });
   const token = core.getInput('access_token', { required: true });
   const workflow_id = core.getInput('workflow_id', { required: false });
+  const exception = core.getInput('exception', { required: false });
+  const exceptionList = exception.split(',').map(item => item.trim());
+  console.log('exception list:', exception);
+  console.log('current branch:', branch);
+  if (exceptionList.indexOf(branch) >= 0) {
+    console.log('ignore branch:', branch);
+    return;
+  }
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
   const workflow_ids: number[] = [];
   const octokit = github.getOctokit(token);

@@ -11,6 +11,9 @@ inputs:
   access_token:
     description: 'Your GitHub Access Token, ie: {{ github.token }}'
     required: true
+  exception:
+    description: 'Exceptional branch'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
