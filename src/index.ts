@@ -27,22 +27,21 @@ async function main() {
   const workflow_ids: number[] = [];
   const octokit = github.getOctokit(token);
 
+  const { data: current_run } = await octokit.actions.getWorkflowRun({
+    owner,
+    repo,
+    run_id: Number(GITHUB_RUN_ID)
+  });
+
   if (workflow_id) {
     // The user provided one or more workflow id
     workflow_id.replace(/\s/g, '')
       .split(',')
       .map(s => Number(s))
       .forEach(n => workflow_ids.push(n));
-  } else if (GITHUB_RUN_ID) {
-    // The user did not provide workflow id so derive from current run
-    const { data } = await octokit.actions.getWorkflowRun({
-      owner,
-      repo,
-      run_id: Number(GITHUB_RUN_ID)
-    });
-    workflow_ids.push(data.workflow_id);
   } else {
-    throw new Error('Expected `workflow_id` input or `GITHUB_RUN_ID` env var');
+    // The user did not provide workflow id so derive from current run
+    workflow_ids.push(current_run.workflow_id);
   }
 
   console.log(`Found workflow_id: ${JSON.stringify(workflow_ids)}`);
@@ -57,7 +56,8 @@ async function main() {
       });
       console.log(`Found ${data.total_count} runs total.`);
       const runningWorkflows = data.workflow_runs.filter(
-        workflow => workflow.head_branch === branch && workflow.head_sha !== headSha && workflow.status !== 'completed'
+        run => run.head_branch === branch && run.head_sha !== headSha && run.status !== 'completed' &&
+            new Date(run.created_at) < new Date(current_run.created_at)
       );
       console.log(`Found ${runningWorkflows.length} runs in progress.`);
       for (const {id, head_sha, status} of runningWorkflows) {
