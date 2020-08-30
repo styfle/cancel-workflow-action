@@ -6,7 +6,7 @@ This includes runs with a [status](https://docs.github.com/en/rest/reference/che
 
 ## How does it work?
 
-When you `git push`, this action will capture the Branch and SHA. It will query GitHub's API to find workflow runs that match the Branch but do not match the SHA (these would be previous pushes) and cancel all of these in-progress runs so that the latest run (current SHA) will finish.
+When you `git push`, this GitHub Action will capture the current Branch and SHA. It will query GitHub's API to find previous workflow runs that match the Branch but do not match the SHA. These in-progress runs will be cancelled leaving only the latest run.
 
 Read more about the [Workflow Runs API](https://docs.github.com/en/rest/reference/actions#workflow-runs).
 
@@ -32,7 +32,7 @@ jobs:
 
 ### Advanced
 
-In some cases, you may wish to avoid modifying all your workflows and instead create a new workflow that cancels your other workflows.
+In some cases, you may wish to avoid modifying all your workflows and instead create a new workflow that cancels your other workflows. This can be useful when you have a problem with workflows getting queued.
 
 - Visit `https://api.github.com/repos/:org/:repo/actions/workflows` to find the Workflow ID(s) you wish to automaticaly cancel.
 - Add a new file `.github/workflows/cancel.yml` with the following:
