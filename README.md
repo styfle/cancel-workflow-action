@@ -2,13 +2,13 @@
 
 This is a GitHub Action that will cancel any previous runs that are not `completed` for a given workflow.
 
-This includes runs with a [status](https://developer.github.com/v3/checks/runs/#parameters-1) of `queued` or `in_progress`.
+This includes runs with a [status](https://docs.github.com/en/rest/reference/checks#check-runs) of `queued` or `in_progress`.
 
 ## How does it work?
 
-When you `git push`, this action will capture the Branch and SHA. It will query GitHub's API to find workflow runs that match the Branch but do not match the SHA (these would be previous pushes) and cancel all of these in-progress runs so that the latest run (current SHA) will finish.
+When you `git push`, this GitHub Action will capture the current Branch and SHA. It will query GitHub's API to find previous workflow runs that match the Branch but do not match the SHA. These in-progress runs will be cancelled leaving only the latest run.
 
-Read more about the [Workflow Runs API](https://developer.github.com/v3/actions/workflow_runs/).
+Read more about the [Workflow Runs API](https://docs.github.com/en/rest/reference/actions#workflow-runs).
 
 ## Usage
 
@@ -32,9 +32,9 @@ jobs:
 
 ### Advanced
 
-In some cases, you may wish to avoid modifying all your workflows and instead create a new workflow that cancels your other workflows.
+In some cases, you may wish to avoid modifying all your workflows and instead create a new workflow that cancels your other workflows. This can be useful when you have a problem with workflows getting queued.
 
-- Visit `https://api.github.com/repos/:org/:repo/actions/workflows` to find the Workflow ID you wish to auto-cancel.
+- Visit `https://api.github.com/repos/:org/:repo/actions/workflows` to find the Workflow ID(s) you wish to automaticaly cancel.
 - Add a new file `.github/workflows/cancel.yml` with the following:
 
 ```yml
