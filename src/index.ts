@@ -24,7 +24,7 @@ async function main() {
   const token = core.getInput('access_token', { required: true });
   const workflow_id = core.getInput('workflow_id', { required: false });
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
-  const workflow_ids: number[] = [];
+  const workflow_ids: string[] = [];
   const octokit = github.getOctokit(token);
 
   const { data: current_run } = await octokit.actions.getWorkflowRun({
@@ -37,11 +37,10 @@ async function main() {
     // The user provided one or more workflow id
     workflow_id.replace(/\s/g, '')
       .split(',')
-      .map(s => Number(s))
       .forEach(n => workflow_ids.push(n));
   } else {
     // The user did not provide workflow id so derive from current run
-    workflow_ids.push(current_run.workflow_id);
+    workflow_ids.push(String(current_run.workflow_id));
   }
 
   console.log(`Found workflow_id: ${JSON.stringify(workflow_ids)}`);
@@ -51,8 +50,9 @@ async function main() {
       const { data } = await octokit.actions.listWorkflowRuns({
         owner,
         repo,
+        // @ts-ignore
         workflow_id,
-        branch
+        branch,
       });
       console.log(`Found ${data.total_count} runs total.`);
       const runningWorkflows = data.workflow_runs.filter(
