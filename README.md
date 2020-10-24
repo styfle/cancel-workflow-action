@@ -52,7 +52,8 @@ jobs:
           access_token: ${{ github.token }}
 ```
 
-_Note_: `workflow_id` accepts a comma separated list of IDs.
+- _Note_: `workflow_id` can be a Workflow ID (number) or Workflow File Name (string)
+- _Note_: `workflow_id` also accepts a comma separated list if you need to cancel multiple workflows
 
 At the time of writing `0.5.0` is the latest release but you can select any [release](https://github.com/styfle/cancel-workflow-action/releases).
 

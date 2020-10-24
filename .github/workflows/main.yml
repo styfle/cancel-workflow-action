@@ -6,7 +6,7 @@ jobs:
   cancel:
     runs-on: ubuntu-latest
     name: Cancel
-    timeout-minutes: 3
+    timeout-minutes: 4
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
@@ -14,5 +14,5 @@ jobs:
       - name: Test Step
         uses: ./ # Uses an action in the root directory
         with:
-          workflow_id: 479426, 830809
+          workflow_id: 479426, 830809, sleep120.yml
           access_token: ${{ github.token }}
