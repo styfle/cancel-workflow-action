@@ -6,7 +6,7 @@ jobs:
   cancel:
     runs-on: ubuntu-latest
     name: Cancel
-    timeout-minutes: 3
+    timeout-minutes: 4
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
