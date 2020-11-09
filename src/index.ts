@@ -56,7 +56,7 @@ async function main() {
       });
       console.log(`Found ${data.total_count} runs total.`);
       const runningWorkflows = data.workflow_runs.filter(
-        run => run.head_branch === branch && run.head_sha !== headSha && run.status !== 'completed' &&
+        (run: WorkflowRun) => run.head_branch === branch && run.head_sha !== headSha && run.status !== 'completed' &&
             new Date(run.created_at) < new Date(current_run.created_at)
       );
       console.log(`Found ${runningWorkflows.length} runs in progress.`);
