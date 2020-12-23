@@ -10,7 +10,7 @@ inputs:
     required: false
   access_token:
     description: 'Your GitHub Access Token, defaults to: {{ github.token }}'
-    default: ${{ github.token }}
+    default: '${{ github.token }}'
 runs:
   using: 'node12'
   main: 'dist/index.js'
