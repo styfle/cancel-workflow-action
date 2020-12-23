@@ -9,8 +9,8 @@ inputs:
     description: 'Optional - A single Workflow ID or a comma separated list of IDs'
     required: false
   access_token:
-    description: 'Your GitHub Access Token, ie: {{ github.token }}'
-    required: true
+    description: 'Your GitHub Access Token, defaults to: {{ github.token }}'
+    default: ${{ github.token }}
 runs:
   using: 'node12'
   main: 'dist/index.js'
