@@ -8,6 +8,10 @@ inputs:
   workflow_id:
     description: 'Optional - A single Workflow ID or a comma separated list of IDs'
     required: false
+  allow_matching_sha:
+    description: 'Allow matching SHA to be canceled. Useful when cancelling other workflows.'
+    required: false
+    default: false
   access_token:
     description: 'Your GitHub Access Token, defaults to: {{ github.token }}'
     default: '${{ github.token }}'

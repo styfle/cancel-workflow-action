@@ -23,6 +23,7 @@ async function main() {
   console.log({ eventName, sha, headSha, branch, owner, repo, GITHUB_RUN_ID });
   const token = core.getInput('access_token', { required: true });
   const workflow_id = core.getInput('workflow_id', { required: false });
+  const allow_matching_sha = core.getInput('allow_matching_sha', { required: false });
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
   const workflow_ids: string[] = [];
   const octokit = github.getOctokit(token);
@@ -55,11 +56,17 @@ async function main() {
         branch,
       });
       console.log(`Found ${data.total_count} runs total.`);
+      console.log(data.workflow_runs.map(run => `- ${run.workflow_url}`).join("\n"));
+      
       const runningWorkflows = data.workflow_runs.filter(
-        run => run.head_branch === branch && run.head_sha !== headSha && run.status !== 'completed' &&
-            new Date(run.created_at) < new Date(current_run.created_at)
+        run => run.head_branch === branch && 
+               (allow_matching_sha || run.head_sha !== headSha) &&
+               run.status !== 'completed' &&
+               new Date(run.created_at) < new Date(current_run.created_at)
       );
-      console.log(`Found ${runningWorkflows.length} runs in progress.`);
+      console.log(`Found ${runningWorkflows.length} runs in to cancel.`);
+      console.log(runningWorkflows.map(run => `- ${run.workflow_url}`).join("\n"));
+
       for (const {id, head_sha, status} of runningWorkflows) {
         console.log('Cancelling another run: ', {id, head_sha, status});
         const res = await octokit.actions.cancelWorkflowRun({
