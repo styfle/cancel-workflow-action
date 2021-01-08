@@ -23,7 +23,7 @@ async function main() {
   console.log({ eventName, sha, headSha, branch, owner, repo, GITHUB_RUN_ID });
   const token = core.getInput('access_token', { required: true });
   const workflow_id = core.getInput('workflow_id', { required: false });
-  const allow_matching_sha = core.getInput('allow_matching_sha', { required: false });
+  const allow_matching_sha = core.getInput('allow_matching_sha', { required: true }) === 'true';
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
   const workflow_ids: string[] = [];
   const octokit = github.getOctokit(token);
