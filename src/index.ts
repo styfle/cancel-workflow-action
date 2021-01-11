@@ -65,7 +65,7 @@ async function main() {
                new Date(run.created_at) < new Date(current_run.created_at)
       );
       console.log(`Found ${runningWorkflows.length} runs in to cancel.`);
-      console.log(runningWorkflows.map(run => `- ${run.html_url}`).join("\n"));
+      console.log(runningWorkflows.map(run => `- ${run.html_url}`).join('\n'));
 
       for (const {id, head_sha, status} of runningWorkflows) {
         console.log('Cancelling another run: ', {id, head_sha, status});
