@@ -5885,12 +5885,14 @@ async function main() {
                 workflow_id,
                 branch,
             });
-            console.log(`Found ${data.total_count} runs total.`);
-            const runningWorkflows = data.workflow_runs.filter(run => run.head_branch === branch &&
-                (ignore_sha || run.head_sha !== headSha) &&
+            const branchWorkflows = data.workflow_runs.filter(run => run.head_branch === branch);
+            console.log(`Found ${branchWorkflows.length} runs total for branch ${branch}.`);
+            console.log(branchWorkflows.map(run => `- ${run.html_url}`).join('\n'));
+            const runningWorkflows = branchWorkflows.filter(run => (ignore_sha || run.head_sha !== headSha) &&
                 run.status !== 'completed' &&
                 new Date(run.created_at) < new Date(current_run.created_at));
-            console.log(`Found ${runningWorkflows.length} runs in progress.`);
+            console.log(`Found ${runningWorkflows.length} runs to cancel.`);
+            console.log(runningWorkflows.map(run => `- ${run.html_url}`).join('\n'));
             for (const { id, head_sha, status } of runningWorkflows) {
                 console.log('Cancelling another run: ', { id, head_sha, status });
                 const res = await octokit.actions.cancelWorkflowRun({
