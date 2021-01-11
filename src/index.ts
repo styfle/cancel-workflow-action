@@ -56,11 +56,11 @@ async function main() {
         branch,
       });
       console.log(`Found ${data.total_count} runs total.`);
-      const runningWorkflows = data.workflow_runs.filter(
-        run => run.head_branch === branch && 
-               (ignore_sha || run.head_sha !== headSha) &&
-               run.status !== 'completed' &&
-               new Date(run.created_at) < new Date(current_run.created_at)
+      const runningWorkflows = data.workflow_runs.filter(run =>
+        run.head_branch === branch && 
+        (ignore_sha || run.head_sha !== headSha) &&
+        run.status !== 'completed' &&
+        new Date(run.created_at) < new Date(current_run.created_at)
       );
       console.log(`Found ${runningWorkflows.length} runs in progress.`);
       for (const {id, head_sha, status} of runningWorkflows) {
