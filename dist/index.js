@@ -5886,7 +5886,7 @@ async function main() {
                 branch,
             });
             console.log(`Found ${data.total_count} runs total.`);
-            console.log(data.workflow_runs.map(run => `- ${run.html_url}`).join("\n"));
+            console.log(data.workflow_runs.map(run => `- ${run.html_url}`).join('\n'));
             const runningWorkflows = data.workflow_runs.filter(run => run.head_branch === branch &&
                 (ignore_sha || run.head_sha !== headSha) &&
                 run.status !== 'completed' &&
