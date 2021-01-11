@@ -9,7 +9,7 @@ inputs:
     description: 'Optional - A single Workflow ID or a comma separated list of IDs'
     required: false
   ignore_sha:
-    description: 'Allow matching SHA to be canceled. Useful when cancelling other workflows.'
+    description: 'Optional - Allow canceling other workflows with the same SHA. Useful for the `pull_request.closed` event.'
     required: false
     default: false
   access_token:
