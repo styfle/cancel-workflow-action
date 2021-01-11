@@ -8,6 +8,10 @@ inputs:
   workflow_id:
     description: 'Optional - A single Workflow ID or a comma separated list of IDs'
     required: false
+  ignore_sha:
+    description: 'Optional - Allow canceling other workflows with the same SHA. Useful for the `pull_request.closed` event.'
+    required: false
+    default: false
   access_token:
     description: 'Your GitHub Access Token, defaults to: {{ github.token }}'
     default: '${{ github.token }}'

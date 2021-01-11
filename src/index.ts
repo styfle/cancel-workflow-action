@@ -23,6 +23,7 @@ async function main() {
   console.log({ eventName, sha, headSha, branch, owner, repo, GITHUB_RUN_ID });
   const token = core.getInput('access_token', { required: true });
   const workflow_id = core.getInput('workflow_id', { required: false });
+  const ignore_sha = core.getInput('ignore_sha', { required: false }) === 'true';
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
   const workflow_ids: string[] = [];
   const octokit = github.getOctokit(token);
@@ -55,9 +56,11 @@ async function main() {
         branch,
       });
       console.log(`Found ${data.total_count} runs total.`);
-      const runningWorkflows = data.workflow_runs.filter(
-        run => run.head_branch === branch && run.head_sha !== headSha && run.status !== 'completed' &&
-            new Date(run.created_at) < new Date(current_run.created_at)
+      const runningWorkflows = data.workflow_runs.filter(run =>
+        run.head_branch === branch && 
+        (ignore_sha || run.head_sha !== headSha) &&
+        run.status !== 'completed' &&
+        new Date(run.created_at) < new Date(current_run.created_at)
       );
       console.log(`Found ${runningWorkflows.length} runs in progress.`);
       for (const {id, head_sha, status} of runningWorkflows) {
