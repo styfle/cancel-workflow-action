@@ -55,7 +55,24 @@ jobs:
 - _Note_: `workflow_id` can be a Workflow ID (number) or Workflow File Name (string)
 - _Note_: `workflow_id` also accepts a comma separated list if you need to cancel multiple workflows
 
-At the time of writing `0.6.0` is the latest release but you can select any [release](https://github.com/styfle/cancel-workflow-action/releases).
+In some cases, you may wish to cancel workflows when you close a Pull Request. Because this is not a push event, the SHA will be the same, so you must use the `ignore_sha` option.
+
+```yml
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  cleanup:
+    name: 'Cleanup After PR Closed'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Cancel build runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          ignore_sha: true
+          workflow_id: 479426
+```
 
 ## Contributing
 
