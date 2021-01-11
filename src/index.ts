@@ -60,7 +60,7 @@ async function main() {
       
       const runningWorkflows = data.workflow_runs.filter(
         run => run.head_branch === branch && 
-               (allow_matching_sha || run.head_sha !== headSha) &&
+               (ignore_sha || run.head_sha !== headSha) &&
                run.status !== 'completed' &&
                new Date(run.created_at) < new Date(current_run.created_at)
       );
