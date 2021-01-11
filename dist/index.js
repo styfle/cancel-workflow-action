@@ -5888,7 +5888,7 @@ async function main() {
             console.log(`Found ${data.total_count} runs total.`);
             console.log(data.workflow_runs.map(run => `- ${run.html_url}`).join("\n"));
             const runningWorkflows = data.workflow_runs.filter(run => run.head_branch === branch &&
-                (allow_matching_sha || run.head_sha !== headSha) &&
+                (ignore_sha || run.head_sha !== headSha) &&
                 run.status !== 'completed' &&
                 new Date(run.created_at) < new Date(current_run.created_at));
             console.log(`Found ${runningWorkflows.length} runs in to cancel.`);
