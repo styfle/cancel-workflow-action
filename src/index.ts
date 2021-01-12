@@ -65,7 +65,7 @@ async function main() {
         run.status !== 'completed' &&
         new Date(run.created_at) < new Date(current_run.created_at)
       );
-      console.log(`...with ${runningWorkflows.length} runs to cancel.`);
+      console.log(`with ${runningWorkflows.length} runs to cancel.`);
       
       for (const {id, head_sha, status, html_url} of runningWorkflows) {
         console.log('Canceling run: ', {id, head_sha, status, html_url});
