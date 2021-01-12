@@ -6,7 +6,7 @@ This includes runs with a [status](https://docs.github.com/en/rest/reference/che
 
 ## How does it work?
 
-When you `git push`, this GitHub Action will capture the current Branch and SHA. It will query GitHub's API to find previous workflow runs that match the Branch but do not match the SHA. These in-progress runs will be cancelled leaving only the latest run.
+When you `git push`, this GitHub Action will capture the current Branch and SHA. It will query GitHub's API to find previous workflow runs that match the Branch but do not match the SHA. These in-progress runs will be canceled leaving only the latest run.
 
 Read more about the [Workflow Runs API](https://docs.github.com/en/rest/reference/actions#workflow-runs).
 
