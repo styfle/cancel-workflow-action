@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
+        uses: styfle/cancel-workflow-action@0.7.0
         with:
           access_token: ${{ github.token }}
       #- name: Run Tests
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - uses: styfle/cancel-workflow-action@0.6.0
+      - uses: styfle/cancel-workflow-action@0.7.0
         with:
           workflow_id: 479426
           access_token: ${{ github.token }}
@@ -68,7 +68,7 @@ jobs:
     timeout-minutes: 3
     steps:
       - name: Cancel build runs
-        uses: styfle/cancel-workflow-action@0.6.0
+        uses: styfle/cancel-workflow-action@0.7.0
         with:
           ignore_sha: true
           workflow_id: 479426
