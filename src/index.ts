@@ -80,6 +80,7 @@ async function main() {
       const msg = e.message || e;
       console.log(`Error while canceling workflow_id ${workflow_id}: ${msg}`);
     }
+    console.log('')
   }));
 }
 

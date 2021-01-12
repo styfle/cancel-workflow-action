@@ -5891,7 +5891,7 @@ async function main() {
             const runningWorkflows = branchWorkflows.filter(run => (ignore_sha || run.head_sha !== headSha) &&
                 run.status !== 'completed' &&
                 new Date(run.created_at) < new Date(current_run.created_at));
-            console.log(`...with ${runningWorkflows.length} runs to cancel.`);
+            console.log(`with ${runningWorkflows.length} runs to cancel.`);
             for (const { id, head_sha, status, html_url } of runningWorkflows) {
                 console.log('Canceling run: ', { id, head_sha, status, html_url });
                 const res = await octokit.actions.cancelWorkflowRun({
@@ -5906,6 +5906,7 @@ async function main() {
             const msg = e.message || e;
             console.log(`Error while canceling workflow_id ${workflow_id}: ${msg}`);
         }
+        console.log('');
     }));
 }
 main()
