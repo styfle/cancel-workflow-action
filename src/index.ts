@@ -18,6 +18,9 @@ async function main() {
   if (payload.pull_request) {
     branch = payload.pull_request.head.ref;
     headSha = payload.pull_request.head.sha;
+  } else if (payload.workflow_run) {
+    branch = payload.workflow_run.head_branch;
+    headSha = payload.workflow_run.head_sha;
   }
 
   console.log({ eventName, sha, headSha, branch, owner, repo, GITHUB_RUN_ID });
@@ -66,7 +69,7 @@ async function main() {
         new Date(run.created_at) < new Date(current_run.created_at)
       );
       console.log(`with ${runningWorkflows.length} runs to cancel.`);
-      
+
       for (const {id, head_sha, status, html_url} of runningWorkflows) {
         console.log('Canceling run: ', {id, head_sha, status, html_url});
         const res = await octokit.actions.cancelWorkflowRun({

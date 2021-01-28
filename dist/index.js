@@ -5856,6 +5856,10 @@ async function main() {
         branch = payload.pull_request.head.ref;
         headSha = payload.pull_request.head.sha;
     }
+    else if (payload.workflow_run) {
+        branch = payload.workflow_run.head_branch;
+        headSha = payload.workflow_run.head_sha;
+    }
     console.log({ eventName, sha, headSha, branch, owner, repo, GITHUB_RUN_ID });
     const token = core.getInput('access_token', { required: true });
     const workflow_id = core.getInput('workflow_id', { required: false });
