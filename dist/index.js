@@ -5883,12 +5883,11 @@ async function main() {
                 owner,
                 repo,
                 workflow_id,
-                branch,
             });
-            const branchWorkflows = data.workflow_runs.filter(run => run.head_branch === branch);
-            console.log(`Found ${branchWorkflows.length} runs for workflow ${workflow_id} on branch ${branch}`);
+            const branchWorkflows = data.workflow_runs;
+            console.log(`Found ${branchWorkflows.length} runs for workflow ${workflow_id}`);
             console.log(branchWorkflows.map(run => `- ${run.html_url}`).join('\n'));
-            const runningWorkflows = branchWorkflows.filter(run => (ignore_sha || run.head_sha !== headSha) &&
+            const runningWorkflows = branchWorkflows.filter(run =>
                 run.status !== 'completed' &&
                 new Date(run.created_at) < new Date(current_run.created_at));
             console.log(`with ${runningWorkflows.length} runs to cancel.`);

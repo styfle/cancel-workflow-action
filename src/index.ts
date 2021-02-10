@@ -53,15 +53,13 @@ async function main() {
         repo,
         // @ts-ignore
         workflow_id,
-        branch,
       });
 
-      const branchWorkflows = data.workflow_runs.filter(run => run.head_branch === branch);
-      console.log(`Found ${branchWorkflows.length} runs for workflow ${workflow_id} on branch ${branch}`);
-      console.log(branchWorkflows.map(run => `- ${run.html_url}`).join('\n'));
+      const branchWorkflows = data.workflow_runs.filter();
+      console.log(`Found ${branchWorkflows.length} runs for workflow ${workflow_id}`);
+      //console.log(branchWorkflows.map(run => `- ${run.html_url}`).join('\n'));
 
       const runningWorkflows = branchWorkflows.filter(run =>
-        (ignore_sha || run.head_sha !== headSha) &&
         run.status !== 'completed' &&
         new Date(run.created_at) < new Date(current_run.created_at)
       );
