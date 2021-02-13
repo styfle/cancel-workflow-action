@@ -30,7 +30,7 @@ jobs:
 ```
 
 
-### Advanced
+### Advanced: Canceling Other Workflows
 
 In some cases, you may wish to avoid modifying all your workflows and instead create a new workflow that cancels your other workflows. This can be useful when you have a problem with workflows getting queued.
 
@@ -54,6 +54,32 @@ jobs:
 
 - _Note_: `workflow_id` can be a Workflow ID (number) or Workflow File Name (string)
 - _Note_: `workflow_id` also accepts a comma separated list if you need to cancel multiple workflows
+
+### Advanced: Pull Requests from Forks
+
+The default GitHub token access is unable to cancel workflows for `pull_request`
+when a pull request is opened from a fork. Therefore, a special setup using
+`workflow_run`, which also works for `push`, is needed.
+Create a `.github/workflows/cancel.yml` with the following instead and replace
+"CI" with the workflow name that contains the `pull_request` workflow:
+
+```yml
+name: Cancel
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - requested
+jobs:
+  cancel:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: styfle/cancel-workflow-action@0.7.0
+      with:
+        workflow_id: ${{ github.event.workflow.id }}
+```
+
+### Advanced: Ignore SHA
 
 In some cases, you may wish to cancel workflows when you close a Pull Request. Because this is not a push event, the SHA will be the same, so you must use the `ignore_sha` option.
 
