@@ -86,7 +86,6 @@ async function main() {
       // Make sure we cancel this run itself if it's out-of-date.
       // We postponed canceling this run because otherwise we couldn't cancel the rest.
       if (all_but_latest && new Date(current_run.created_at) < cancel_before) {
-        // FIXME actions/core doesn't support cancelling, so we need to do it through the API
         const id = current_run.id;
         const res = await octokit.actions.cancelWorkflowRun({
           owner,
