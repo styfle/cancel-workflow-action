@@ -67,6 +67,7 @@ async function main() {
       const runningWorkflows = branchWorkflows.filter(run =>
         (ignore_sha || run.head_sha !== headSha) &&
         run.status !== 'completed' &&
+        run.id !== current_run.id && // Do not cancel yourself
         (cancel_newer || new Date(run.created_at) < new Date(current_run.created_at))
       );
       console.log(`with ${runningWorkflows.length} runs to cancel.`);

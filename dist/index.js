@@ -5895,6 +5895,7 @@ async function main() {
             console.log(branchWorkflows.map(run => `- ${run.html_url}`).join('\n'));
             const runningWorkflows = branchWorkflows.filter(run => (ignore_sha || run.head_sha !== headSha) &&
                 run.status !== 'completed' &&
+                run.id !== current_run.id &&
                 (cancel_newer || new Date(run.created_at) < new Date(current_run.created_at)));
             console.log(`with ${runningWorkflows.length} runs to cancel.`);
             for (const { id, head_sha, status, html_url } of runningWorkflows) {
