@@ -73,15 +73,20 @@ async function main() {
       );
       console.log(`with ${runningWorkflows.length} runs to cancel.`);
 
+      const promises = [];
       for (const {id, head_sha, status, html_url} of runningWorkflows) {
         console.log('Canceling run: ', {id, head_sha, status, html_url});
-        const res = await octokit.actions.cancelWorkflowRun({
+        const current_promise = octokit.actions.cancelWorkflowRun({
           owner,
           repo,
           run_id: id
+        }).then((res) => {
+          console.log(`Cancel run ${id} responded with status ${res.status}`);
         });
-        console.log(`Cancel run ${id} responded with status ${res.status}`);
+        promises.push(current_promise);
       }
+      await Promise.all(promises);
+
     } catch (e) {
       const msg = e.message || e;
       console.log(`Error while canceling workflow_id ${workflow_id}: ${msg}`);
