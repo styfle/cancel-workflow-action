@@ -5864,6 +5864,7 @@ async function main() {
     const token = core.getInput('access_token', { required: true });
     const workflow_id = core.getInput('workflow_id', { required: false });
     const ignore_sha = core.getInput('ignore_sha', { required: false }) === 'true';
+    const cancel_newer = core.getInput('cancel_newer', { required: false }) === 'true';
     console.log(`Found token: ${token ? 'yes' : 'no'}`);
     const workflow_ids = [];
     const octokit = github.getOctokit(token);
@@ -5894,7 +5895,7 @@ async function main() {
             console.log(branchWorkflows.map(run => `- ${run.html_url}`).join('\n'));
             const runningWorkflows = branchWorkflows.filter(run => (ignore_sha || run.head_sha !== headSha) &&
                 run.status !== 'completed' &&
-                new Date(run.created_at) < new Date(current_run.created_at));
+                (cancel_newer || new Date(run.created_at) < new Date(current_run.created_at)));
             console.log(`with ${runningWorkflows.length} runs to cancel.`);
             for (const { id, head_sha, status, html_url } of runningWorkflows) {
                 console.log('Canceling run: ', { id, head_sha, status, html_url });
