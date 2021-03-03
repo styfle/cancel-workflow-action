@@ -11,10 +11,15 @@ inputs:
   ignore_sha:
     description: 'Optional - Allow canceling other workflows with the same SHA. Useful for the `pull_request.closed` event.'
     required: false
-    default: false
+    default: 'false'
+  cancel_newer:
+    description: 'Cancel all queued and in progress workflows, even if they are newer'
+    required: false
+    default: 'false'
   access_token:
     description: 'Your GitHub Access Token, defaults to: {{ github.token }}'
     default: '${{ github.token }}'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
