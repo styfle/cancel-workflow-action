@@ -100,6 +100,29 @@ jobs:
           workflow_id: 479426
 ```
 
+### Advanced: Cancel newer builds
+
+Under certain circumstances it could be beneficial to cancel _newer_ workflows. For example, if there are no code
+changes, but you are pulling data from another source, there may be no need for subsequent builds that are currently
+queued. Using the `cancel_newer` option will cancel _ALL_ other builds for the same workflow.
+
+```yml
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  cleanup:
+    name: 'Clean up ALL other builds'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Cancel ALL build runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          ignore_sha: true
+          cancel_newer: true
+```
+
 ## Contributing
 
 - Clone this repo
