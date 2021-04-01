@@ -5897,15 +5897,7 @@ async function main() {
                 run.status !== 'completed' &&
                 new Date(run.created_at) < new Date(current_run.created_at));
             console.log(`with ${runningWorkflows.length} runs to cancel.`);
-            for (const { id, head_sha, status, html_url } of runningWorkflows) {
-                console.log('Canceling run: ', { id, head_sha, status, html_url });
-                const res = await octokit.actions.cancelWorkflowRun({
-                    owner,
-                    repo,
-                    run_id: id
-                });
-                console.log(`Cancel run ${id} responded with status ${res.status}`);
-            }
+            await cancelWorkflowRuns(runningWorkflows, owner, repo, token);
         }
         catch (e) {
             const msg = e.message || e;
@@ -5913,6 +5905,18 @@ async function main() {
         }
         console.log('');
     }));
+}
+async function cancelWorkflowRuns(runningWorkflows, owner, repo, token) {
+    const octokit = github.getOctokit(token);
+    for (const { id, head_sha, status, html_url } of runningWorkflows) {
+        console.log('Canceling run: ', { id, head_sha, status, html_url });
+        const res = await octokit.actions.cancelWorkflowRun({
+            owner,
+            repo,
+            run_id: id
+        });
+        console.log(`Cancel run ${id} responded with status ${res.status}`);
+    }
 }
 main()
     .then(() => core.info('Cancel Complete.'))

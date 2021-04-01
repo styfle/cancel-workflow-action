@@ -79,16 +79,7 @@ async function main(): Promise<void> {
             new Date(run.created_at) < new Date(current_run.created_at)
         );
         console.log(`with ${runningWorkflows.length} runs to cancel.`);
-
-        for (const { id, head_sha, status, html_url } of runningWorkflows) {
-          console.log('Canceling run: ', { id, head_sha, status, html_url });
-          const res = await octokit.actions.cancelWorkflowRun({
-            owner,
-            repo,
-            run_id: id
-          });
-          console.log(`Cancel run ${id} responded with status ${res.status}`);
-        }
+        await cancelWorkflowRuns(runningWorkflows, owner, repo, token);
       } catch (e) {
         const msg = e.message || e;
         console.log(`Error while canceling workflow_id ${workflow_id}: ${msg}`);
@@ -96,6 +87,25 @@ async function main(): Promise<void> {
       console.log('');
     })
   );
+}
+
+async function cancelWorkflowRuns(
+  runningWorkflows: { id: number; head_sha: string; status: string; html_url: string }[],
+  owner: string,
+  repo: string,
+  token: string
+): Promise<void> {
+  const octokit = github.getOctokit(token);
+
+  for (const { id, head_sha, status, html_url } of runningWorkflows) {
+    console.log('Canceling run: ', { id, head_sha, status, html_url });
+    const res = await octokit.actions.cancelWorkflowRun({
+      owner,
+      repo,
+      run_id: id
+    });
+    console.log(`Cancel run ${id} responded with status ${res.status}`);
+  }
 }
 
 main()
