@@ -5862,7 +5862,7 @@ async function main() {
     }
     console.log({ eventName, sha, headSha, branch, owner, repo, GITHUB_RUN_ID });
     const token = core.getInput('access_token', { required: true });
-    const workflow_id = core.getInput('workflow_id', { required: false });
+    const workflow_id_input = core.getInput('workflow_id', { required: false });
     const ignore_sha = core.getInput('ignore_sha', { required: false }) === 'true';
     console.log(`Found token: ${token ? 'yes' : 'no'}`);
     const workflow_ids = [];
@@ -5872,8 +5872,8 @@ async function main() {
         repo,
         run_id: Number(GITHUB_RUN_ID)
     });
-    if (workflow_id) {
-        const workflow_ids_input = workflow_id.replace(/\s/g, '').split(',');
+    if (workflow_id_input) {
+        const workflow_ids_input = workflow_id_input.replace(/\s/g, '').split(',');
         for (const id of workflow_ids_input) {
             workflow_ids.push(id);
         }
