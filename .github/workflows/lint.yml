@@ -16,3 +16,4 @@ jobs:
       - run: yarn
       - run: yarn build
       - run: yarn format-check
+      - run: yarn lint
