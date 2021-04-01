@@ -100,6 +100,21 @@ jobs:
           workflow_id: 479426
 ```
 
+### Advanced: Cancel All But Latest
+
+In some cases, you may wish to cancel all workflow runs except the newest one. This can help if you have very deep workflow queues and you find that the newer runs are not even executing thus they cannot clear out of date runs. In this mode, the out-of-date workflow runs will cancel all but the latest run and themselves, freeing up the workflow queue.
+
+```yml
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          all_but_latest: true
+```
+
 ## Contributing
 
 - Clone this repo

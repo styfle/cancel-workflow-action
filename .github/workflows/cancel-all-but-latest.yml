@@ -1,0 +1,22 @@
+name: Cancel All But Latest
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  task:
+    # Use macOS because it has a 5 concurrent job limit: easier to test by manual enqueue
+    # https://docs.github.com/en/actions/reference/usage-limits-billing-and-administration#usage-limits
+    runs-on: macos-latest
+    name: Task
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - name: Test Step
+        uses: ./ # Uses an action in the root directory
+        with:
+          all_but_latest: true
+          ignore_sha: true
+      - run: echo 'Sleeping...'; sleep 240; echo 'Done.';
