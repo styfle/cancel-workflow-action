@@ -1,0 +1,4 @@
+#!/bin/sh
+yarn build && git add dist/index.js
+yarn format-check
+yarn lint
