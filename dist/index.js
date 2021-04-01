@@ -5875,11 +5875,11 @@ async function main() {
     if (workflow_id_input) {
         const workflow_ids_input = workflow_id_input.replace(/\s/g, '').split(',');
         for (const id of workflow_ids_input) {
-            workflow_ids.push(id);
+            workflow_ids.push(parseInt(id, 10));
         }
     }
     else {
-        workflow_ids.push(String(current_run.workflow_id));
+        workflow_ids.push(current_run.workflow_id);
     }
     console.log(`Found workflow_id: ${JSON.stringify(workflow_ids)}`);
     await Promise.all(workflow_ids.map(async (workflow_id) => {
