@@ -5908,15 +5908,21 @@ async function main() {
 }
 async function cancelWorkflowRuns(runningWorkflows, owner, repo, token) {
     const octokit = github.getOctokit(token);
+    const promises = [];
     for (const { id, head_sha, status, html_url } of runningWorkflows) {
         console.log('Canceling run: ', { id, head_sha, status, html_url });
-        const res = await octokit.actions.cancelWorkflowRun({
+        const current_promise = octokit.actions
+            .cancelWorkflowRun({
             owner,
             repo,
             run_id: id
+        })
+            .then(res => {
+            console.log(`Cancel run ${id} responded with status ${res.status}`);
         });
-        console.log(`Cancel run ${id} responded with status ${res.status}`);
+        promises.push(current_promise);
     }
+    await Promise.all(promises);
 }
 main()
     .then(() => core.info('Cancel Complete.'))
