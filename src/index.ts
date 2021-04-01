@@ -73,12 +73,17 @@ async function main(): Promise<void> {
         );
         console.log(branchWorkflows.map(run => `- ${run.html_url}`).join('\n'));
 
-        const runningWorkflows = branchWorkflows.filter(
-          run =>
-            (ignore_sha || run.head_sha !== headSha) &&
-            run.status !== 'completed' &&
-            new Date(run.created_at) < new Date(current_run.created_at)
+        // Filter for only uncompleted workflow runs
+        let runningWorkflows = branchWorkflows.filter(run => run.status !== 'completed');
+
+        // Filter out for only our headSha unless ignoring it
+        runningWorkflows = runningWorkflows.filter(run => ignore_sha || run.head_sha !== headSha);
+
+        // Filter all workflow runs newer than ours
+        runningWorkflows = runningWorkflows.filter(
+          run => new Date(run.created_at) < new Date(current_run.created_at)
         );
+
         console.log(`with ${runningWorkflows.length} runs to cancel.`);
         await cancelWorkflowRuns(runningWorkflows, owner, repo, token);
       } catch (e) {
