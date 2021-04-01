@@ -45,10 +45,10 @@ async function main(): Promise<void> {
 
   if (workflow_id) {
     // The user provided one or more workflow id
-    workflow_id
-      .replace(/\s/g, '')
-      .split(',')
-      .forEach(n => workflow_ids.push(n));
+    const workflow_ids_input = workflow_id.replace(/\s/g, '').split(',');
+    for (const id of workflow_ids_input) {
+      workflow_ids.push(id);
+    }
   } else {
     // The user did not provide workflow id so derive from current run
     workflow_ids.push(String(current_run.workflow_id));
