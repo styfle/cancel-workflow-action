@@ -5873,7 +5873,8 @@ async function main() {
         run_id: Number(GITHUB_RUN_ID)
     });
     if (workflow_id) {
-        workflow_id.replace(/\s/g, '')
+        workflow_id
+            .replace(/\s/g, '')
             .split(',')
             .forEach(n => workflow_ids.push(n));
     }
@@ -5887,7 +5888,7 @@ async function main() {
                 owner,
                 repo,
                 workflow_id,
-                branch,
+                branch
             });
             const branchWorkflows = data.workflow_runs.filter(run => run.head_branch === branch);
             console.log(`Found ${branchWorkflows.length} runs for workflow ${workflow_id} on branch ${branch}`);
