@@ -5873,10 +5873,10 @@ async function main() {
         run_id: Number(GITHUB_RUN_ID)
     });
     if (workflow_id) {
-        workflow_id
-            .replace(/\s/g, '')
-            .split(',')
-            .forEach(n => workflow_ids.push(n));
+        const workflow_ids_input = workflow_id.replace(/\s/g, '').split(',');
+        for (const id of workflow_ids_input) {
+            workflow_ids.push(id);
+        }
     }
     else {
         workflow_ids.push(String(current_run.workflow_id));
