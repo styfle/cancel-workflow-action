@@ -31,7 +31,7 @@ async function main(): Promise<void> {
 
   console.log({ eventName, sha, headSha, branch, owner, repo, GITHUB_RUN_ID });
   const token = core.getInput('access_token', { required: true });
-  const workflow_id = core.getInput('workflow_id', { required: false });
+  const workflow_id_input = core.getInput('workflow_id', { required: false });
   const ignore_sha = core.getInput('ignore_sha', { required: false }) === 'true';
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
   const workflow_ids: string[] = [];
@@ -43,9 +43,9 @@ async function main(): Promise<void> {
     run_id: Number(GITHUB_RUN_ID)
   });
 
-  if (workflow_id) {
+  if (workflow_id_input) {
     // The user provided one or more workflow id
-    const workflow_ids_input = workflow_id.replace(/\s/g, '').split(',');
+    const workflow_ids_input = workflow_id_input.replace(/\s/g, '').split(',');
     for (const id of workflow_ids_input) {
       workflow_ids.push(id);
     }
