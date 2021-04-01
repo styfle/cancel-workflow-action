@@ -9,7 +9,7 @@ if (!core) {
   throw new Error('Module not found: core');
 }
 
-async function main() {
+async function main(): Promise<void> {
   const {
     eventName,
     sha,
