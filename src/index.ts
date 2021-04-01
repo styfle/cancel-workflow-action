@@ -60,6 +60,7 @@ async function main(): Promise<void> {
     workflow_ids.map(async workflow_id => {
       try {
         const { data } = await octokit.actions.listWorkflowRuns({
+          per_page: 100,
           owner,
           repo,
           workflow_id,
