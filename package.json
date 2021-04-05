@@ -6,7 +6,8 @@
   "scripts": {
     "build": "ncc build src/index.ts --license LICENSES.txt",
     "format": "prettier --write '**/*.ts'",
-    "format-check": "prettier --check '**/*.ts'"
+    "format-check": "prettier --check '**/*.ts'",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@actions/core": "1.2.6",
@@ -15,6 +16,7 @@
   "devDependencies": {
     "@vercel/ncc": "0.27.0",
     "prettier": "2.2.1",
-    "typescript": "4.1.5"
+    "typescript": "4.1.5",
+    "husky": "^6.0.0"
   }
 }
