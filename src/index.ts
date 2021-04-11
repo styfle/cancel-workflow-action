@@ -27,6 +27,7 @@ async function main() {
   const token = core.getInput('access_token', { required: true });
   const workflow_id = core.getInput('workflow_id', { required: false });
   const ignore_sha = core.getInput('ignore_sha', { required: false }) === 'true';
+  const all_but_latest = core.getInput('all_but_latest', { required: false });
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
   const workflow_ids: string[] = [];
   const octokit = github.getOctokit(token);
@@ -58,20 +59,34 @@ async function main() {
         workflow_id,
         branch,
       });
+      console.log(`Found ${data.total_count} runs total.`);
 
-      const branchWorkflows = data.workflow_runs.filter(run => run.head_branch === branch);
-      console.log(`Found ${branchWorkflows.length} runs for workflow ${workflow_id} on branch ${branch}`);
-      console.log(branchWorkflows.map(run => `- ${run.html_url}`).join('\n'));
+      let cancel_before;
+      if (all_but_latest) {
+        cancel_before = new Date(data.workflow_runs.reduce((a, b) => Math.max(a.created_at, b.created_at)));
+      } else {
+        cancel_before = new Date(current_run.created_at);
+      }
 
-      const runningWorkflows = branchWorkflows.filter(run =>
-        (ignore_sha || run.head_sha !== headSha) &&
-        run.status !== 'completed' &&
-        new Date(run.created_at) < new Date(current_run.created_at)
+      const runningWorkflows = data.workflow_runs.filter(
+        run => run.head_branch === branch && (ignore_sha || run.head_sha !== headSha) && run.status !== 'completed' &&
+            run != current_run &&
+            new Date(run.created_at) < cancel_before
       );
-      console.log(`with ${runningWorkflows.length} runs to cancel.`);
-
-      for (const {id, head_sha, status, html_url} of runningWorkflows) {
+      console.log(`Found ${runningWorkflows.length} runs to cancel.`);
+      for (const {id, head_sha, status} of runningWorkflows) {
         console.log('Canceling run: ', {id, head_sha, status, html_url});
+        const res = await octokit.actions.cancelWorkflowRun({
+          owner,
+          repo,
+          run_id: id
+        });
+        console.log(`Cancel run ${id} responded with status ${res.status}`);
+      }
+      // Make sure we cancel this run itself if it's out-of-date.
+      // We postponed canceling this run because otherwise we couldn't cancel the rest.
+      if (all_but_latest && new Date(current_run.created_at) < cancel_before) {
+        const id = current_run.id;
         const res = await octokit.actions.cancelWorkflowRun({
           owner,
           repo,

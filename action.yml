@@ -2,7 +2,7 @@ name: 'Cancel Workflow Action'
 description: 'This Action will cancel any previous runs that are not `completed` for a given workflow.'
 author: styfle
 branding:
-  icon: 'stop-circle'  
+  icon: 'stop-circle'
   color: 'white'
 inputs:
   workflow_id:
@@ -15,6 +15,10 @@ inputs:
   access_token:
     description: 'Your GitHub Access Token, defaults to: {{ github.token }}'
     default: '${{ github.token }}'
+    required: true
+  all_but_latest:
+    description: "Cancel all actions but the last one"
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
