@@ -100,7 +100,7 @@ jobs:
           workflow_id: 479426
 ```
 
-## Advanced: All But Latest
+### Advanced: All But Latest
 
 Because this action can only cancel workflows if it is actually being run, it only helps if the pipeline isn't saturated and there are still runners available to schedule the workflow.
 
