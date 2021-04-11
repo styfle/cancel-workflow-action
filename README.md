@@ -104,7 +104,7 @@ jobs:
 
 Because this action can only cancel workflows if it is actually being run, it only helps if the pipeline isn't saturated and there are still runners available to schedule the workflow.
 
-By default, this action does not cancel any workflows older than itself. The optional flag ``all_but_latest`` switches to a mode where the action also cancels itself and all later-scheduled workflows but the last one.
+By default, this action does not cancel any workflows older than itself. The optional flag `all_but_latest` switches to a mode where the action also cancels itself and all later-scheduled workflows but the last one.
 
 ```yml
 name: Cancel
