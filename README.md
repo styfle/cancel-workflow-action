@@ -103,6 +103,7 @@ jobs:
 ## Advanced: Cancel more recent workflows
 
 Because this action can only cancel workflows if it is actually being run, it only helps if the pipeline isn't saturated and there are still runners available to schedule the workflow.
+
 By default, this action does not cancel any workflows older than itself. The optional flag ``all_but_latest`` switches to a mode where the action also cancels itself and all later-scheduled workflows but the last one.
 
 ```yml
@@ -119,8 +120,6 @@ jobs:
           all_but_latest: true
           access_token: ${{ github.token }}
 ```
-
-At the time of writing `0.8.0` is the latest release but you can select any [release](https://github.com/styfle/cancel-workflow-action/releases).
 
 ## Contributing
 
