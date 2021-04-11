@@ -75,7 +75,7 @@ async function main() {
       );
       console.log(`Found ${runningWorkflows.length} runs to cancel.`);
       for (const {id, head_sha, status} of runningWorkflows) {
-        console.log('Cancelling another run: ', {id, head_sha, status});
+        console.log('Canceling run: ', {id, head_sha, status, html_url});
         const res = await octokit.actions.cancelWorkflowRun({
           owner,
           repo,
