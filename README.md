@@ -6,7 +6,7 @@ This includes runs with a [status](https://docs.github.com/en/rest/reference/che
 
 ## How does it work?
 
-When you `git push`, this GitHub Action will capture the current Branch and SHA. It will query GitHub's API to find previous workflow runs that match the Branch but do not match the SHA. These in-progress runs will be canceled leaving only this run.
+When you `git push`, this GitHub Action will capture the current Branch and SHA. It will query GitHub's API to find previous workflow runs that match the Branch but do not match the SHA. These in-progress runs will be canceled leaving only this run, or the [latest run](#advanced-all-but-latest).
 
 Read more about the [Workflow Runs API](https://docs.github.com/en/rest/reference/actions#workflow-runs).
 
@@ -100,10 +100,11 @@ jobs:
           workflow_id: 479426
 ```
 
-## Advanced: Cancel more recent workflows
+## Advanced: All But Latest
 
 Because this action can only cancel workflows if it is actually being run, it only helps if the pipeline isn't saturated and there are still runners available to schedule the workflow.
-By default, this action does not cancel any workflows older than itself. The optional flag ``all_but_latest`` switches to a mode where the action also cancels itself and all later-scheduled workflows but the last one.
+
+By default, this action does not cancel any workflows created after itself. The `all_but_latest` flags allows the action to cancel itself and all later-scheduled workflows, leaving only the latest.
 
 ```yml
 name: Cancel
@@ -119,8 +120,6 @@ jobs:
           all_but_latest: true
           access_token: ${{ github.token }}
 ```
-
-At the time of writing `0.8.0` is the latest release but you can select any [release](https://github.com/styfle/cancel-workflow-action/releases).
 
 ## Contributing
 
