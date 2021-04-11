@@ -66,7 +66,6 @@ async function main() {
       }
       const runningWorkflows = workflow_runs.filter(run =>
         run.id !== current_run.id &&
-        run.head_branch === branch &&
         (ignore_sha || run.head_sha !== headSha) &&
         run.status !== 'completed' &&
         new Date(run.created_at) < cancelBefore
