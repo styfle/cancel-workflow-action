@@ -13,5 +13,5 @@ jobs:
         uses: ./ # Uses an action in the root directory
         with:
           access_token: ${{ github.token }}
-      - uses: actions/setup-node@v2.1.5
+      - uses: actions/setup-node@v2
       - run: echo 'Sleeping...'; sleep 120; echo 'Done.';
