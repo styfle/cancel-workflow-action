@@ -15,10 +15,10 @@ inputs:
   access_token:
     description: 'Your GitHub Access Token, defaults to: {{ github.token }}'
     default: '${{ github.token }}'
-    required: true
+    required: false
   all_but_latest:
     description: "Cancel all actions but the last one"
     required: false
 runs:
-  using: 'node12'
+  using: 'node14'
   main: 'dist/index.js'
