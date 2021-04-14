@@ -1,4 +1,3 @@
-module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -5814,124 +5813,6 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 144:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__nccwpck_require__(186));
-const github = __importStar(__nccwpck_require__(438));
-if (!github) {
-    throw new Error('Module not found: github');
-}
-if (!core) {
-    throw new Error('Module not found: core');
-}
-async function main() {
-    const { eventName, sha, ref, repo: { owner, repo }, payload, } = github.context;
-    const { GITHUB_RUN_ID } = process.env;
-    let branch = ref.slice(11);
-    let headSha = sha;
-    if (payload.pull_request) {
-        branch = payload.pull_request.head.ref;
-        headSha = payload.pull_request.head.sha;
-    }
-    else if (payload.workflow_run) {
-        branch = payload.workflow_run.head_branch;
-        headSha = payload.workflow_run.head_sha;
-    }
-    console.log({ eventName, sha, headSha, branch, owner, repo, GITHUB_RUN_ID });
-    const token = core.getInput('access_token', { required: true });
-    const workflow_id = core.getInput('workflow_id', { required: false });
-    const ignore_sha = core.getInput('ignore_sha', { required: false }) === 'true';
-    const all_but_latest = core.getInput('all_but_latest', { required: false });
-    console.log(`Found token: ${token ? 'yes' : 'no'}`);
-    const workflow_ids = [];
-    const octokit = github.getOctokit(token);
-    const { data: current_run } = await octokit.actions.getWorkflowRun({
-        owner,
-        repo,
-        run_id: Number(GITHUB_RUN_ID),
-    });
-    if (workflow_id) {
-        workflow_id
-            .replace(/\s/g, '')
-            .split(',')
-            .forEach(n => workflow_ids.push(n));
-    }
-    else {
-        workflow_ids.push(String(current_run.workflow_id));
-    }
-    console.log(`Found workflow_id: ${JSON.stringify(workflow_ids)}`);
-    await Promise.all(workflow_ids.map(async (workflow_id) => {
-        try {
-            const { data: { total_count, workflow_runs }, } = await octokit.actions.listWorkflowRuns({
-                per_page: 100,
-                owner,
-                repo,
-                workflow_id,
-                branch,
-            });
-            console.log(`Found ${total_count} runs total.`);
-            let cancelBefore = new Date(current_run.created_at);
-            if (all_but_latest) {
-                const n = workflow_runs
-                    .map(run => new Date(run.created_at).getTime())
-                    .reduce((a, b) => Math.max(a, b), cancelBefore.getTime());
-                cancelBefore = new Date(n);
-            }
-            const runningWorkflows = workflow_runs.filter(run => run.id !== current_run.id &&
-                (ignore_sha || run.head_sha !== headSha) &&
-                run.status !== 'completed' &&
-                new Date(run.created_at) < cancelBefore);
-            if (all_but_latest && new Date(current_run.created_at) < cancelBefore) {
-                runningWorkflows.push(current_run);
-            }
-            console.log(`Found ${runningWorkflows.length} runs to cancel.`);
-            for (const { id, head_sha, status, html_url } of runningWorkflows) {
-                console.log('Canceling run: ', { id, head_sha, status, html_url });
-                const res = await octokit.actions.cancelWorkflowRun({
-                    owner,
-                    repo,
-                    run_id: id,
-                });
-                console.log(`Cancel run ${id} responded with status ${res.status}`);
-            }
-        }
-        catch (e) {
-            const msg = e.message || e;
-            console.log(`Error while canceling workflow_id ${workflow_id}: ${msg}`);
-        }
-        console.log('');
-    }));
-}
-main()
-    .then(() => core.info('Cancel Complete.'))
-    .catch(e => core.setFailed(e.message));
-
-
-/***/ }),
-
 /***/ 877:
 /***/ ((module) => {
 
@@ -6052,8 +5933,9 @@ module.exports = require("zlib");;
 /******/ 	// The require function
 /******/ 	function __nccwpck_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -6076,12 +5958,150 @@ module.exports = require("zlib");;
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__nccwpck_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__nccwpck_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
-/******/ 	__nccwpck_require__.ab = __dirname + "/";/************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	return __nccwpck_require__(144);
+/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(186);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(438);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+
+
+if (!_actions_github__WEBPACK_IMPORTED_MODULE_1__) {
+    throw new Error('Module not found: github');
+}
+if (!_actions_core__WEBPACK_IMPORTED_MODULE_0__) {
+    throw new Error('Module not found: core');
+}
+async function main() {
+    const { eventName, sha, ref, repo: { owner, repo }, payload, } = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context;
+    const { GITHUB_RUN_ID } = process.env;
+    let branch = ref.slice(11);
+    let headSha = sha;
+    if (payload.pull_request) {
+        branch = payload.pull_request.head.ref;
+        headSha = payload.pull_request.head.sha;
+    }
+    else if (payload.workflow_run) {
+        branch = payload.workflow_run.head_branch;
+        headSha = payload.workflow_run.head_sha;
+    }
+    console.log({ eventName, sha, headSha, branch, owner, repo, GITHUB_RUN_ID });
+    const token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('access_token', { required: true });
+    const workflow_id = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('workflow_id', { required: false });
+    const ignore_sha = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('ignore_sha', { required: false }) === 'true';
+    const all_but_latest = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('all_but_latest', { required: false });
+    console.log(`Found token: ${token ? 'yes' : 'no'}`);
+    const workflow_ids = [];
+    const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit(token);
+    const { data: current_run } = await octokit.actions.getWorkflowRun({
+        owner,
+        repo,
+        run_id: Number(GITHUB_RUN_ID),
+    });
+    if (workflow_id) {
+        workflow_id
+            .replace(/\s/g, '')
+            .split(',')
+            .forEach(n => workflow_ids.push(n));
+    }
+    else {
+        workflow_ids.push(String(current_run.workflow_id));
+    }
+    console.log(`Found workflow_id: ${JSON.stringify(workflow_ids)}`);
+    await Promise.all(workflow_ids.map(async (workflow_id) => {
+        try {
+            const { data: { total_count, workflow_runs }, } = await octokit.actions.listWorkflowRuns({
+                per_page: 100,
+                owner,
+                repo,
+                workflow_id,
+                branch,
+            });
+            console.log(`Found ${total_count} runs total.`);
+            let cancelBefore = new Date(current_run.created_at);
+            if (all_but_latest) {
+                const n = workflow_runs
+                    .map(run => new Date(run.created_at).getTime())
+                    .reduce((a, b) => Math.max(a, b), cancelBefore.getTime());
+                cancelBefore = new Date(n);
+            }
+            const runningWorkflows = workflow_runs.filter(run => run.id !== current_run.id &&
+                (ignore_sha || run.head_sha !== headSha) &&
+                run.status !== 'completed' &&
+                new Date(run.created_at) < cancelBefore);
+            if (all_but_latest && new Date(current_run.created_at) < cancelBefore) {
+                runningWorkflows.push(current_run);
+            }
+            console.log(`Found ${runningWorkflows.length} runs to cancel.`);
+            for (const { id, head_sha, status, html_url } of runningWorkflows) {
+                console.log('Canceling run: ', { id, head_sha, status, html_url });
+                const res = await octokit.actions.cancelWorkflowRun({
+                    owner,
+                    repo,
+                    run_id: id,
+                });
+                console.log(`Cancel run ${id} responded with status ${res.status}`);
+            }
+        }
+        catch (e) {
+            const msg = e.message || e;
+            console.log(`Error while canceling workflow_id ${workflow_id}: ${msg}`);
+        }
+        console.log('');
+    }));
+}
+main()
+    .then(() => _actions_core__WEBPACK_IMPORTED_MODULE_0__.info('Cancel Complete.'))
+    .catch(e => _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(e.message));
+
+})();
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;
