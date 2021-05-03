@@ -14,7 +14,7 @@
     "@actions/github": "4.0.0"
   },
   "devDependencies": {
-    "@vercel/ncc": "0.28.3",
+    "@vercel/ncc": "0.28.5",
     "husky": "6.0.0",
     "prettier": "2.2.1",
     "typescript": "4.2.4"
