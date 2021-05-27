@@ -11,7 +11,7 @@ inputs:
   ignore_sha:
     description: 'Optional - Allow canceling other workflows with the same SHA. Useful for the `pull_request.closed` event.'
     required: false
-    default: false
+    default: 'false'
   access_token:
     description: 'Your GitHub Access Token, defaults to: {{ github.token }}'
     default: '${{ github.token }}'
@@ -19,6 +19,7 @@ inputs:
   all_but_latest:
     description: "Cancel all actions but the last one"
     required: false
+    default: 'false'
 runs:
   using: 'node12'
   main: 'dist/index.js'
