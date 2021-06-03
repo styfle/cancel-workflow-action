@@ -120,13 +120,13 @@ jobs:
           access_token: ${{ github.token }}
 ```
 
-### Permissions control
+### Advanced: Token Permissions
 
-No change to permissions is required by default. The instructions below or for improved control over of those permissions.
+No change to permissions is required by default. The instructions below are for improved control over of those permissions.
 
-By default, Github creates the `GITHUB_TOKEN` for actions with some read/write permissions. It may be a good practice to switch to read-only permissions by default. Visit the [dedicated documentation page](https://docs.github.com/en/github/administering-a-repository/managing-repository-settings/disabling-or-limiting-github-actions-for-a-repository#setting-the-permissions-of-the-github_token-for-your-repository) for details.
+By default, GitHub creates the `GITHUB_TOKEN` for Actions with some read/write permissions. It may be a good practice to switch to read-only permissions by default. Visit the [dedicated documentation page](https://docs.github.com/en/github/administering-a-repository/managing-repository-settings/disabling-or-limiting-github-actions-for-a-repository#setting-the-permissions-of-the-github_token-for-your-repository) for details.
 
-Permissions can be set in the workflow, globally or at job level, see the [reference manual page](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions). `cancel-workflow-action` only requires write access to the `actions` scope, so it is enough to have:
+Permissions can be set for all Jobs in a Workflow or a specific Job, see the [reference manual page](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions). `cancel-workflow-action` only requires write access to the `actions` scope, so it is enough to have:
 
 ```yml
 jobs:
