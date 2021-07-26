@@ -6078,6 +6078,9 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(438);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(747);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 if (!_actions_github__WEBPACK_IMPORTED_MODULE_1__) {
@@ -6088,7 +6091,7 @@ if (!_actions_core__WEBPACK_IMPORTED_MODULE_0__) {
 }
 async function main() {
     const { eventName, sha, ref, repo: { owner, repo }, payload, } = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context;
-    const { GITHUB_RUN_ID } = process.env;
+    const { GITHUB_RUN_ID, GITHUB_EVENT_PATH } = process.env;
     let branch = ref.slice(11);
     let headSha = sha;
     if (payload.pull_request) {
@@ -6122,6 +6125,15 @@ async function main() {
         workflow_ids.push(String(current_run.workflow_id));
     }
     console.log(`Found workflow_id: ${JSON.stringify(workflow_ids)}`);
+    const trigger_repo_id = (function () {
+        try {
+            const data = JSON.parse((0,fs__WEBPACK_IMPORTED_MODULE_2__.readFileSync)(GITHUB_EVENT_PATH || '', 'utf8'));
+            return data.workflow_run.head_repository.id;
+        }
+        catch (e) {
+            return current_run.head_repository.id;
+        }
+    })();
     await Promise.all(workflow_ids.map(async (workflow_id) => {
         try {
             const { data: { total_count, workflow_runs }, } = await octokit.actions.listWorkflowRuns({
@@ -6139,7 +6151,8 @@ async function main() {
                     .reduce((a, b) => Math.max(a, b), cancelBefore.getTime());
                 cancelBefore = new Date(n);
             }
-            const runningWorkflows = workflow_runs.filter(run => run.id !== current_run.id &&
+            const runningWorkflows = workflow_runs.filter(run => run.head_repository.id === trigger_repo_id &&
+                run.id !== current_run.id &&
                 (ignore_sha || run.head_sha !== headSha) &&
                 run.status !== 'completed' &&
                 new Date(run.created_at) < cancelBefore);
