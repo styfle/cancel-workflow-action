@@ -6078,9 +6078,6 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(438);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(747);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);
-
 
 
 if (!_actions_github__WEBPACK_IMPORTED_MODULE_1__) {
@@ -6091,7 +6088,7 @@ if (!_actions_core__WEBPACK_IMPORTED_MODULE_0__) {
 }
 async function main() {
     const { eventName, sha, ref, repo: { owner, repo }, payload, } = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context;
-    const { GITHUB_RUN_ID, GITHUB_EVENT_PATH } = process.env;
+    const { GITHUB_RUN_ID } = process.env;
     let branch = ref.slice(11);
     let headSha = sha;
     if (payload.pull_request) {
@@ -6126,11 +6123,10 @@ async function main() {
     }
     console.log(`Found workflow_id: ${JSON.stringify(workflow_ids)}`);
     const trigger_repo_id = (function () {
-        try {
-            const data = JSON.parse((0,fs__WEBPACK_IMPORTED_MODULE_2__.readFileSync)(GITHUB_EVENT_PATH || '', 'utf8'));
-            return data.workflow_run.head_repository.id;
+        if (payload.workflow_run) {
+            return payload.workflow_run.head_repository.id;
         }
-        catch (e) {
+        else {
             return current_run.head_repository.id;
         }
     })();

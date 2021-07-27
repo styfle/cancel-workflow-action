@@ -1,6 +1,5 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import { readFileSync } from 'fs';
 
 if (!github) {
   throw new Error('Module not found: github');
@@ -18,7 +17,7 @@ async function main() {
     repo: { owner, repo },
     payload,
   } = github.context;
-  const { GITHUB_RUN_ID, GITHUB_EVENT_PATH } = process.env;
+  const { GITHUB_RUN_ID } = process.env;
 
   let branch = ref.slice(11);
   let headSha = sha;
@@ -57,10 +56,9 @@ async function main() {
   }
   console.log(`Found workflow_id: ${JSON.stringify(workflow_ids)}`);
   const trigger_repo_id = (function () {
-    try {
-      const data = JSON.parse(readFileSync(GITHUB_EVENT_PATH || '', 'utf8'));
-      return data.workflow_run.head_repository.id;
-    } catch (e) {
+    if (payload.workflow_run) {
+      return payload.workflow_run.head_repository.id;
+    } else {
       return current_run.head_repository.id;
     }
   })();
