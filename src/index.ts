@@ -55,13 +55,7 @@ async function main() {
     workflow_ids.push(String(current_run.workflow_id));
   }
   console.log(`Found workflow_id: ${JSON.stringify(workflow_ids)}`);
-  const trigger_repo_id = (function () {
-    if (payload.workflow_run) {
-      return payload.workflow_run.head_repository.id;
-    } else {
-      return current_run.head_repository.id;
-    }
-  })();
+  const trigger_repo_id = (payload.workflow_run || current_run).head_repository.id;
   await Promise.all(
     workflow_ids.map(async workflow_id => {
       try {
