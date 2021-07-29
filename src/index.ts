@@ -55,6 +55,7 @@ async function main() {
     workflow_ids.push(String(current_run.workflow_id));
   }
   console.log(`Found workflow_id: ${JSON.stringify(workflow_ids)}`);
+  const trigger_repo_id = (payload.workflow_run || current_run).head_repository.id;
   await Promise.all(
     workflow_ids.map(async workflow_id => {
       try {
@@ -78,6 +79,7 @@ async function main() {
         }
         const runningWorkflows = workflow_runs.filter(
           run =>
+            run.head_repository.id === trigger_repo_id &&
             run.id !== current_run.id &&
             (ignore_sha || run.head_sha !== headSha) &&
             run.status !== 'completed' &&

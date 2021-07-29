@@ -6122,6 +6122,7 @@ async function main() {
         workflow_ids.push(String(current_run.workflow_id));
     }
     console.log(`Found workflow_id: ${JSON.stringify(workflow_ids)}`);
+    const trigger_repo_id = (payload.workflow_run || current_run).head_repository.id;
     await Promise.all(workflow_ids.map(async (workflow_id) => {
         try {
             const { data: { total_count, workflow_runs }, } = await octokit.actions.listWorkflowRuns({
@@ -6139,7 +6140,8 @@ async function main() {
                     .reduce((a, b) => Math.max(a, b), cancelBefore.getTime());
                 cancelBefore = new Date(n);
             }
-            const runningWorkflows = workflow_runs.filter(run => run.id !== current_run.id &&
+            const runningWorkflows = workflow_runs.filter(run => run.head_repository.id === trigger_repo_id &&
+                run.id !== current_run.id &&
                 (ignore_sha || run.head_sha !== headSha) &&
                 run.status !== 'completed' &&
                 new Date(run.created_at) < cancelBefore);
