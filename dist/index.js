@@ -6163,11 +6163,12 @@ async function main() {
                     };
                 }))
                 : []).filter(workflow => workflow.jobs.length > 0);
+            let workflow_runs_to_cancel = [...workflow_runs];
             if (workflow_jobs.length) {
                 console.log('Found disqualifying jobs running, skipping cancel', workflow_jobs);
-                workflow_runs.length = 0;
+                workflow_runs_to_cancel = workflow_runs.filter(({ id }) => !workflow_jobs.map(({ workflow_run_id }) => workflow_run_id).includes(id));
             }
-            const runningWorkflows = workflow_runs.filter(run => run.head_repository.id === trigger_repo_id &&
+            const runningWorkflows = workflow_runs_to_cancel.filter(run => run.head_repository.id === trigger_repo_id &&
                 run.id !== current_run.id &&
                 (ignore_sha || run.head_sha !== headSha) &&
                 run.status !== 'completed' &&
