@@ -116,9 +116,9 @@ async function main() {
 
         if (workflow_jobs.length) {
           console.log('Found disqualifying jobs running, skipping cancel', workflow_jobs);
+          const workflows_to_skip = workflow_jobs.map(({ workflow_run_id }) => workflow_run_id);
           workflow_runs_to_cancel = workflow_runs.filter(
-            ({ id }: any) =>
-              !workflow_jobs.map(({ workflow_run_id }) => workflow_run_id).includes(id),
+            ({ id }: any) => !workflows_to_skip.includes(id),
           );
         }
 

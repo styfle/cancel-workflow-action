@@ -6166,7 +6166,8 @@ async function main() {
             let workflow_runs_to_cancel = [...workflow_runs];
             if (workflow_jobs.length) {
                 console.log('Found disqualifying jobs running, skipping cancel', workflow_jobs);
-                workflow_runs_to_cancel = workflow_runs.filter(({ id }) => !workflow_jobs.map(({ workflow_run_id }) => workflow_run_id).includes(id));
+                const workflows_to_skip = workflow_jobs.map(({ workflow_run_id }) => workflow_run_id);
+                workflow_runs_to_cancel = workflow_runs.filter(({ id }) => !workflows_to_skip.includes(id));
             }
             const runningWorkflows = workflow_runs_to_cancel.filter(run => run.head_repository.id === trigger_repo_id &&
                 run.id !== current_run.id &&
