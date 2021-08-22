@@ -32,9 +32,16 @@ async function main() {
   console.log({ eventName, sha, headSha, branch, owner, repo, GITHUB_RUN_ID });
   const token = core.getInput('access_token', { required: true });
   const workflow_id = core.getInput('workflow_id', { required: false });
+  const disqualifying_jobs_input = core.getInput('disqualifying_jobs', { required: false });
+  const disqualifying_jobs = disqualifying_jobs_input ? JSON.parse(disqualifying_jobs_input) : null;
   const ignore_sha = core.getBooleanInput('ignore_sha', { required: false });
   const all_but_latest = core.getBooleanInput('all_but_latest', { required: false });
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
+  console.log(
+    disqualifying_jobs
+      ? `Skipping cancel if job in ${disqualifying_jobs}`
+      : 'No disqualifying jobs',
+  );
   const workflow_ids: string[] = [];
   const octokit = github.getOctokit(token);
 
@@ -77,6 +84,39 @@ async function main() {
             .reduce((a, b) => Math.max(a, b), cancelBefore.getTime());
           cancelBefore = new Date(n);
         }
+
+        if (disqualifying_jobs && !Array.isArray(disqualifying_jobs)) {
+          core.setFailed('Disqualifying jobs found but is not array');
+        }
+
+        const workflow_jobs = (
+          disqualifying_jobs && disqualifying_jobs.length > 0
+            ? await Promise.all(
+                workflow_runs.map(async ({ id, jobs_url }) => {
+                  const {
+                    data: { jobs },
+                  } = await octokit.request(`GET ${jobs_url}`, {
+                    owner,
+                    repo,
+                    run_id: id,
+                  });
+                  return {
+                    workflow_run_id: id,
+                    jobs: jobs.filter(
+                      ({ status, name }: any) =>
+                        status === 'in_progress' && disqualifying_jobs.includes(name),
+                    ),
+                  };
+                }),
+              )
+            : []
+        ).filter(workflow => workflow.jobs.length > 0);
+
+        if (workflow_jobs.length) {
+          console.log('Found disqualifying jobs running, skipping cancel', workflow_jobs);
+          workflow_runs.length = 0;
+        }
+
         const runningWorkflows = workflow_runs.filter(
           run =>
             run.head_repository.id === trigger_repo_id &&

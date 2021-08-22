@@ -20,6 +20,9 @@ inputs:
     description: "Cancel all actions but the last one"
     required: false
     default: 'false'
+  disqualifying_jobs:
+    description: "A JSON array of named jobs that will stop cancellation if in progress. Usefull for jobs like deployments where cancellation could risk downtime."
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

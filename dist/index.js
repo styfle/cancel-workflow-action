@@ -5893,7 +5893,7 @@ module.exports = eval("require")("encoding");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("assert");;
+module.exports = require("assert");
 
 /***/ }),
 
@@ -5901,7 +5901,7 @@ module.exports = require("assert");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("events");;
+module.exports = require("events");
 
 /***/ }),
 
@@ -5909,7 +5909,7 @@ module.exports = require("events");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("fs");;
+module.exports = require("fs");
 
 /***/ }),
 
@@ -5917,7 +5917,7 @@ module.exports = require("fs");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("http");;
+module.exports = require("http");
 
 /***/ }),
 
@@ -5925,7 +5925,7 @@ module.exports = require("http");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("https");;
+module.exports = require("https");
 
 /***/ }),
 
@@ -5933,7 +5933,7 @@ module.exports = require("https");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("net");;
+module.exports = require("net");
 
 /***/ }),
 
@@ -5941,7 +5941,7 @@ module.exports = require("net");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("os");;
+module.exports = require("os");
 
 /***/ }),
 
@@ -5949,7 +5949,7 @@ module.exports = require("os");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("path");;
+module.exports = require("path");
 
 /***/ }),
 
@@ -5957,7 +5957,7 @@ module.exports = require("path");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("stream");;
+module.exports = require("stream");
 
 /***/ }),
 
@@ -5965,7 +5965,7 @@ module.exports = require("stream");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("tls");;
+module.exports = require("tls");
 
 /***/ }),
 
@@ -5973,7 +5973,7 @@ module.exports = require("tls");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("url");;
+module.exports = require("url");
 
 /***/ }),
 
@@ -5981,7 +5981,7 @@ module.exports = require("url");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("util");;
+module.exports = require("util");
 
 /***/ }),
 
@@ -5989,7 +5989,7 @@ module.exports = require("util");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("zlib");;
+module.exports = require("zlib");
 
 /***/ })
 
@@ -6068,7 +6068,9 @@ module.exports = require("zlib");;
 /******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
-/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";/************************************************************************/
+/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
@@ -6102,9 +6104,14 @@ async function main() {
     console.log({ eventName, sha, headSha, branch, owner, repo, GITHUB_RUN_ID });
     const token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('access_token', { required: true });
     const workflow_id = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('workflow_id', { required: false });
+    const disqualifying_jobs_input = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('disqualifying_jobs', { required: false });
+    const disqualifying_jobs = disqualifying_jobs_input ? JSON.parse(disqualifying_jobs_input) : null;
     const ignore_sha = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getBooleanInput('ignore_sha', { required: false });
     const all_but_latest = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getBooleanInput('all_but_latest', { required: false });
     console.log(`Found token: ${token ? 'yes' : 'no'}`);
+    console.log(disqualifying_jobs
+        ? `Skipping cancel if job in ${disqualifying_jobs}`
+        : 'No disqualifying jobs');
     const workflow_ids = [];
     const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit(token);
     const { data: current_run } = await octokit.actions.getWorkflowRun({
@@ -6139,6 +6146,26 @@ async function main() {
                     .map(run => new Date(run.created_at).getTime())
                     .reduce((a, b) => Math.max(a, b), cancelBefore.getTime());
                 cancelBefore = new Date(n);
+            }
+            if (disqualifying_jobs && !Array.isArray(disqualifying_jobs)) {
+                _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed('Disqualifying jobs found but is not array');
+            }
+            const workflow_jobs = (disqualifying_jobs && disqualifying_jobs.length > 0
+                ? await Promise.all(workflow_runs.map(async ({ id, jobs_url }) => {
+                    const { data: { jobs }, } = await octokit.request(`GET ${jobs_url}`, {
+                        owner,
+                        repo,
+                        run_id: id,
+                    });
+                    return {
+                        workflow_run_id: id,
+                        jobs: jobs.filter(({ status, name }) => status === 'in_progress' && disqualifying_jobs.includes(name)),
+                    };
+                }))
+                : []).filter(workflow => workflow.jobs.length > 0);
+            if (workflow_jobs.length) {
+                console.log('Found disqualifying jobs running, skipping cancel', workflow_jobs);
+                workflow_runs.length = 0;
             }
             const runningWorkflows = workflow_runs.filter(run => run.head_repository.id === trigger_repo_id &&
                 run.id !== current_run.id &&
