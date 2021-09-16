@@ -6168,7 +6168,7 @@ async function main() {
 }
 main()
     .then(() => _actions_core__WEBPACK_IMPORTED_MODULE_0__.info('Cancel Complete.'))
-    .catch(e => _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(e.message));
+    .catch((e) => _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(e.message));
 
 })();
 
