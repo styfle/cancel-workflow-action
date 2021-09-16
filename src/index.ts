@@ -100,7 +100,7 @@ async function main() {
           });
           console.log(`Cancel run ${id} responded with status ${res.status}`);
         }
-      } catch (e) {
+      } catch (e: any) {
         const msg = e.message || e;
         console.log(`Error while canceling workflow_id ${workflow_id}: ${msg}`);
       }
@@ -111,4 +111,4 @@ async function main() {
 
 main()
   .then(() => core.info('Cancel Complete.'))
-  .catch(e => core.setFailed(e.message));
+  .catch((e: any) => core.setFailed(e.message));
