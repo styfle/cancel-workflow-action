@@ -143,6 +143,27 @@ jobs:
 
 _Note_ : This is typical when global access is set to be restrictive. Only this job will elevate those permissions.
 
+### Advanced: Disqualifying Jobs
+
+In the case where you may want for an `in_progress` job to stop the cancellation of a workflow you may pass a JSON Array as input to `disqualifying_jobs`. If a job is named in the array and its `status` is `in_progress` the workflow will be removed from the list of jobs to cancel and skipped.
+
+This is useful for operations such as static site deployment where two jobs have the ability to read/write files simultaneously which could cause downtime or runtime errors.
+
+```yml
+name: Cancel
+on: [push]
+jobs:
+  cancel:
+    name: 'Cancel Previous Runs'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+          disqualifying_jobs: '["deploy"]'
+```
+
 ## Contributing
 
 - Clone this repo
