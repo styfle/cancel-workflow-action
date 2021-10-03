@@ -38,7 +38,7 @@ async function main() {
   const workflow_ids: string[] = [];
   const octokit = github.getOctokit(token);
 
-  const { data: current_run } = await octokit.actions.getWorkflowRun({
+  const { data: current_run } = await octokit.rest.actions.getWorkflowRun({
     owner,
     repo,
     run_id: Number(GITHUB_RUN_ID),
@@ -61,7 +61,7 @@ async function main() {
       try {
         const {
           data: { total_count, workflow_runs },
-        } = await octokit.actions.listWorkflowRuns({
+        } = await octokit.rest.actions.listWorkflowRuns({
           per_page: 100,
           owner,
           repo,
@@ -93,7 +93,7 @@ async function main() {
         console.log(`Found ${runningWorkflows.length} runs to cancel.`);
         for (const { id, head_sha, status, html_url } of runningWorkflows) {
           console.log('Canceling run: ', { id, head_sha, status, html_url });
-          const res = await octokit.actions.cancelWorkflowRun({
+          const res = await octokit.rest.actions.cancelWorkflowRun({
             owner,
             repo,
             run_id: id,
