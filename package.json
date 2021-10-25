@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@vercel/ncc": "0.31.1",
-    "husky": "7.0.2",
+    "husky": "7.0.4",
     "prettier": "2.4.1",
     "typescript": "4.4.4"
   }
