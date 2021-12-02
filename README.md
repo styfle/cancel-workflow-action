@@ -20,13 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
+        uses: styfle/cancel-workflow-action@0.9.1
       #- name: Run Tests
       #  uses: actions/setup-node@v2
       #  run: node test.js
       # ... etc
 ```
-
 
 ### Advanced: Canceling Other Workflows
 
@@ -44,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - uses: styfle/cancel-workflow-action@0.9.0
+      - uses: styfle/cancel-workflow-action@0.9.1
         with:
           workflow_id: 479426
 ```
@@ -71,7 +70,7 @@ jobs:
   cancel:
     runs-on: ubuntu-latest
     steps:
-    - uses: styfle/cancel-workflow-action@0.9.0
+    - uses: styfle/cancel-workflow-action@0.9.1
       with:
         workflow_id: ${{ github.event.workflow.id }}
 ```
@@ -91,7 +90,7 @@ jobs:
     timeout-minutes: 3
     steps:
       - name: Cancel build runs
-        uses: styfle/cancel-workflow-action@0.9.0
+        uses: styfle/cancel-workflow-action@0.9.1
         with:
           ignore_sha: true
           workflow_id: 479426
@@ -112,10 +111,33 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - uses: styfle/cancel-workflow-action@0.9.0
+      - uses: styfle/cancel-workflow-action@0.9.1
         with:
           all_but_latest: true
 ```
+
+### Advanced: Token Permissions
+
+No change to permissions is required by default. The instructions below are for improved control over of those permissions.
+
+By default, GitHub creates the `GITHUB_TOKEN` for Actions with some read/write permissions. It may be a good practice to switch to read-only permissions by default. Visit the [dedicated documentation page](https://docs.github.com/en/github/administering-a-repository/managing-repository-settings/disabling-or-limiting-github-actions-for-a-repository#setting-the-permissions-of-the-github_token-for-your-repository) for details.
+
+Permissions can be set for all Jobs in a Workflow or a specific Job, see the [reference manual page](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions). `cancel-workflow-action` only requires write access to the `actions` scope, so it is enough to have:
+
+```yml
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+```
+
+_Note_ : This is typical when global access is set to be restrictive. Only this job will elevate those permissions.
 
 ## Contributing
 
