@@ -45,11 +45,20 @@ async function main() {
   });
 
   if (workflow_id) {
-    // The user provided one or more workflow id
-    workflow_id
-      .replace(/\s/g, '')
-      .split(',')
-      .forEach(n => workflow_ids.push(n));
+    // When workflow_id is 'all'
+    // Ids of the all workflows be taken to cancel
+    if (workflow_id === 'all') {
+      const {
+        data: { workflows: allWorkflows },
+      } = await octokit.rest.actions.listRepoWorkflows({ owner, repo });
+      allWorkflows.forEach(w => workflow_ids.push(String(w.id)));
+    } else {
+      // The user provided one or more workflow id
+      workflow_id
+        .replace(/\s/g, '')
+        .split(',')
+        .forEach(n => workflow_ids.push(n));
+    }
   } else {
     // The user did not provide workflow id so derive from current run
     workflow_ids.push(String(current_run.workflow_id));
