@@ -45,8 +45,7 @@ async function main() {
   });
 
   if (workflow_id) {
-    // When workflow_id is 'all'
-    // Ids of the all workflows be taken to cancel
+    // When workflow_id is 'all', cancel all workflows
     if (workflow_id === 'all') {
       const {
         data: { workflows: allWorkflows },
