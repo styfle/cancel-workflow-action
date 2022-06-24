@@ -53,8 +53,7 @@ jobs:
 
 - _Note_: `workflow_id` can be a Workflow ID (number) or Workflow File Name (string)
 - _Note_: `workflow_id` also accepts a comma separated list if you need to cancel multiple workflows
-
-- _Note_: `workflow_id` accepts the value as `all`, which will cancel all the workflows running in the branch
+- _Note_: `workflow_id` accepts the value `all`, which will cancel all the workflows running in the branch
 
 
 ### Advanced: Pull Requests from Forks
