@@ -21,8 +21,6 @@ jobs:
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.10.0
-        with:
-          access_token: ${{ github.token }}
       #- name: Run Tests
       #  uses: actions/setup-node@v1
       #  run: node test.js
@@ -48,7 +46,6 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.10.0
         with:
           workflow_id: 479426
-          access_token: ${{ github.token }}
 ```
 
 - _Note_: `workflow_id` can be a Workflow ID (number) or Workflow File Name (string)
@@ -119,7 +116,6 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.10.0
         with:
           all_but_latest: true
-          access_token: ${{ github.token }}
 ```
 
 ### Advanced: Token Permissions

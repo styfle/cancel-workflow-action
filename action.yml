@@ -14,8 +14,8 @@ inputs:
     default: 'false'
   access_token:
     description: 'Your GitHub Access Token, defaults to: {{ github.token }}'
-    default: '${{ github.token }}'
-    required: true
+    default: ${{ github.token }}
+    required: false
   all_but_latest:
     description: "Cancel all actions but the last one"
     required: false
