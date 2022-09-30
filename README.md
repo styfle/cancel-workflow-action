@@ -22,7 +22,7 @@ jobs:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action
       #- name: Run Tests
-      #  uses: actions/setup-node@v1
+      #  uses: actions/setup-node
       #  run: node test.js
       # ... etc
 ```
