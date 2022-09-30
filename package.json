@@ -1,6 +1,6 @@
 {
   "name": "cancel-workflow-action",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
@@ -10,13 +10,13 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@actions/core": "1.2.6",
-    "@actions/github": "4.0.0"
+    "@actions/core": "1.9.1",
+    "@actions/github": "5.1.0"
   },
   "devDependencies": {
-    "@vercel/ncc": "0.27.0",
-    "prettier": "2.2.1",
-    "typescript": "4.2.4",
-    "husky": "6.0.0"
+    "@vercel/ncc": "0.34.0",
+    "husky": "8.0.1",
+    "prettier": "2.7.1",
+    "typescript": "4.8.3"
   }
 }

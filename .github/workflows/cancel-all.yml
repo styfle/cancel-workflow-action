@@ -1,7 +1,9 @@
-name: Cancel Self
+name: Cancel All Workflows
+on: push
 
-on: [push]
-
+# Push again in the same branch
+# automatically all the worklows will be cancelled
+# To prevent this cancellation, comment this workflow
 jobs:
   task:
     runs-on: ubuntu-latest
@@ -13,5 +15,6 @@ jobs:
         uses: ./ # Uses an action in the root directory
         with:
           access_token: ${{ github.token }}
+          workflow_id: all
       - uses: actions/setup-node@v3.5.0
       - run: echo 'Sleeping...'; sleep 120; echo 'Done.';
