@@ -20,6 +20,9 @@ inputs:
     description: "Cancel all actions but the last one"
     required: false
     default: 'false'
+  ignore_branches_on_push:
+    description: "Do not trigger cancellation for given branches when trigger event is push"
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

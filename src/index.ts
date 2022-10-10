@@ -34,7 +34,21 @@ async function main() {
   const workflow_id = core.getInput('workflow_id', { required: false });
   const ignore_sha = core.getBooleanInput('ignore_sha', { required: false });
   const all_but_latest = core.getBooleanInput('all_but_latest', { required: false });
+  const ignore_branches_on_push = core.getMultilineInput('ignore_branches_on_push', {
+    required: false,
+  });
+  console.log(`ignore_branches_on_push: ${JSON.stringify(ignore_branches_on_push)}`);
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
+  const workflow_run_event = payload && payload.workflow_run && payload.workflow_run.event;
+  const is_push = workflow_run_event === 'push';
+  console.log(`event: ${workflow_run_event}, is_push: ${is_push}`);
+  const should_ignore_on_push =
+    ignore_branches_on_push && ignore_branches_on_push.indexOf(branch) >= 0;
+  console.log(`should_ignore_on_push: ${should_ignore_on_push}`);
+  if (should_ignore_on_push) {
+    console.log(`Ignore cancellation on push for branch: ${branch}`);
+    return;
+  }
   const workflow_ids: string[] = [];
   const octokit = github.getOctokit(token);
 
