@@ -39,6 +39,10 @@ Notice there is no `v` prefix, just the `@major.minor.patch` version.
 
 Visit [Releases](https://github.com/styfle/cancel-workflow-action/releases) to find the latest version at the top of the page.
 
+> **Warning**
+> 
+> You might run into "the `uses' attribute must be a path, a Docker image, or owner/repo@ref" error if you don't specify a version.
+
 ### Advanced: Canceling Other Workflows
 
 In some cases, you may wish to avoid modifying all your workflows and instead create a new workflow that cancels your other workflows. This can be useful when you have a problem with workflows getting queued.
