@@ -9714,8 +9714,7 @@ async function main() {
     const workflow_run_event = payload && payload.workflow_run && payload.workflow_run.event;
     const is_push = workflow_run_event === 'push';
     console.log(`event: ${workflow_run_event}, is_push: ${is_push}`);
-    const should_ignore_on_push = ignore_branches_on_push && ignore_branches_on_push.indexOf(branch) >= 0;
-    console.log(`should_ignore_on_push: ${should_ignore_on_push}`);
+    const should_ignore_on_push = is_push && ignore_branches_on_push && ignore_branches_on_push.indexOf(branch) >= 0;
     if (should_ignore_on_push) {
         console.log(`Ignore cancellation on push for branch: ${branch}`);
         return;
