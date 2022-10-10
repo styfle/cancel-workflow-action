@@ -130,6 +130,27 @@ jobs:
           all_but_latest: true
 ```
 
+### Advanced: Ignore branches on push
+
+Sometimes you may only want to cancel workflow runs that are triggered by pull requests, but not by the default branch so that every commit to the default branch can be verified by full CI and receive a green checkmark.
+The branches listed in `ignore_branches_on_push` will be ignored by this action on push.
+
+```yml
+name: Cancel
+on: [push]
+jobs:
+  cancel:
+    name: 'Cancel Previous Runs'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: styfle/cancel-workflow-action
+        with:
+          ignore_branches_on_push: |
+            main
+            master
+```
+
 ### Advanced: Token Permissions
 
 No change to permissions is required by default. The instructions below are for improved control over of those permissions.
