@@ -16,5 +16,5 @@ jobs:
         with:
           access_token: ${{ github.token }}
           workflow_id: all
-      - uses: actions/setup-node@v3.5.1
+      - uses: actions/setup-node@v3.6.0
       - run: echo 'Sleeping...'; sleep 120; echo 'Done.';
