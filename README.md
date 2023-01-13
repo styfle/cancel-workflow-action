@@ -1,3 +1,14 @@
+> **Warning**
+> In April 2021, GitHub [announced](https://github.blog/changelog/2021-04-19-github-actions-limit-workflow-run-or-job-concurrency/) native support for canceling workflows.
+>
+> You probably don't need this custom action. Instead, use the native behavior by adding this to your workflow yaml:
+> ```
+> concurrency:
+>   group: ${{ github.workflow }}-${{ github.ref }}
+>   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+> ```
+> Read the [official documentation](https://docs.github.com/en/actions/using-jobs/using-concurrency) to learn more.
+
 # Cancel Workflow Action
 
 This is a GitHub Action that will cancel any previous runs that are not `completed` for a given workflow.
