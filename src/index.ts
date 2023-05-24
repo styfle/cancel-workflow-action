@@ -33,6 +33,7 @@ async function main() {
   const token = core.getInput('access_token');
   const workflow_id = core.getInput('workflow_id', { required: false });
   const ignore_sha = core.getBooleanInput('ignore_sha', { required: false });
+  const ignore_branch = core.getBooleanInput('ignore_branch', { required: false });
   const all_but_latest = core.getBooleanInput('all_but_latest', { required: false });
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
   const workflow_ids: string[] = [];
@@ -75,7 +76,7 @@ async function main() {
           repo,
           // @ts-ignore
           workflow_id,
-          branch,
+          branch: ignore_branch ? undefined : branch,
         });
         console.log(`Found ${total_count} runs total.`);
         let cancelBefore = new Date(current_run.created_at);
