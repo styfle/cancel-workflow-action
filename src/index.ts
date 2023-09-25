@@ -94,10 +94,9 @@ async function main() {
             run.status !== 'completed' &&
             new Date(run.created_at) < cancelBefore,
         );
-        if(cancel_only_queued) {
-          runningWorkflows.filter(run =>
-            run.status === 'queued');
-        };
+        if (cancel_only_queued) {
+          runningWorkflows.filter(run => run.status === 'queued');
+        }
         if (all_but_latest && new Date(current_run.created_at) < cancelBefore) {
           // Make sure we cancel this run itself if it's out-of-date.
           // We must cancel this run last so we can cancel the others first.
