@@ -20,6 +20,10 @@ inputs:
     description: "Cancel all actions but the last one"
     required: false
     default: 'false'
+  cancel_only_queued:
+    description: "Cancel only 'queued' runs (with steps waiting for approval), skip the ones that are in progress (safer)"
+    required: false
+    default: 'false'
 runs:
   using: 'node16'
   main: 'dist/index.js'

@@ -34,6 +34,7 @@ async function main() {
   const workflow_id = core.getInput('workflow_id', { required: false });
   const ignore_sha = core.getBooleanInput('ignore_sha', { required: false });
   const all_but_latest = core.getBooleanInput('all_but_latest', { required: false });
+  const cancel_only_queued = core.getBooleanInput('cancel_only_queued', { required: false });
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
   const workflow_ids: string[] = [];
   const octokit = github.getOctokit(token);
@@ -93,6 +94,10 @@ async function main() {
             run.status !== 'completed' &&
             new Date(run.created_at) < cancelBefore,
         );
+        if(cancel_only_queued) {
+          runningWorkflows.filter(run =>
+            run.status === 'queued');
+        };
         if (all_but_latest && new Date(current_run.created_at) < cancelBefore) {
           // Make sure we cancel this run itself if it's out-of-date.
           // We must cancel this run last so we can cancel the others first.
