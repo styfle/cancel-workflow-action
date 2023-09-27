@@ -9755,7 +9755,7 @@ async function main() {
                 run.status !== 'completed' &&
                 new Date(run.created_at) < cancelBefore);
             if (cancel_only_queued) {
-                runningWorkflows.filter(run => run.status === 'queued');
+                runningWorkflows.filter(run => run.status === 'waiting');
             }
             if (all_but_latest && new Date(current_run.created_at) < cancelBefore) {
                 runningWorkflows.push(current_run);
