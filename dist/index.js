@@ -9752,11 +9752,8 @@ async function main() {
             const runningWorkflows = workflow_runs.filter(run => run.head_repository.id === trigger_repo_id &&
                 run.id !== current_run.id &&
                 (ignore_sha || run.head_sha !== headSha) &&
-                run.status !== 'completed' &&
+                cancel_only_queued ? run.status ===  'waiting' : run.status !== 'completed' &&
                 new Date(run.created_at) < cancelBefore);
-            if (cancel_only_queued) {
-                runningWorkflows.filter(run => run.status === 'waiting');
-            }
             if (all_but_latest && new Date(current_run.created_at) < cancelBefore) {
                 runningWorkflows.push(current_run);
             }
