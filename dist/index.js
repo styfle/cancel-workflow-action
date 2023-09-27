@@ -9762,7 +9762,7 @@ async function main() {
             }
             console.log(`Found ${runningWorkflows.length} runs to cancel.`);
             for (const { id, head_sha, status, html_url } of runningWorkflows) {
-                console.log('Canceling run: ', { id, head_sha, status, html_url });
+                console.log('Canceling run 2: ', { id, head_sha, status, html_url });
                 const res = await octokit.rest.actions.cancelWorkflowRun({
                     owner,
                     repo,
