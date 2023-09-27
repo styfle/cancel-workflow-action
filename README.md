@@ -192,4 +192,5 @@ _Note_ : This is typical when global access is set to be restrictive. Only this 
 - Run `yarn install`
 - Edit `./src/index.ts`
 - Run `yarn build`
+- Run `yarn format`
 - Commit changes including `./dist/index.js` bundle

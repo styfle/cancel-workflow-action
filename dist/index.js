@@ -9752,14 +9752,15 @@ async function main() {
             const runningWorkflows = workflow_runs.filter(run => run.head_repository.id === trigger_repo_id &&
                 run.id !== current_run.id &&
                 (ignore_sha || run.head_sha !== headSha) &&
-                cancel_only_queued ? run.status ===  'waiting' : run.status !== 'completed' &&
-                new Date(run.created_at) < cancelBefore);
+                cancel_only_queued
+                ? run.status === 'waiting'
+                : run.status !== 'completed' && new Date(run.created_at) < cancelBefore);
             if (all_but_latest && new Date(current_run.created_at) < cancelBefore) {
                 runningWorkflows.push(current_run);
             }
             console.log(`Found ${runningWorkflows.length} runs to cancel.`);
             for (const { id, head_sha, status, html_url } of runningWorkflows) {
-                console.log('Canceling run 2: ', { id, head_sha, status, html_url });
+                console.log('Canceling run: ', { id, head_sha, status, html_url });
                 const res = await octokit.rest.actions.cancelWorkflowRun({
                     owner,
                     repo,

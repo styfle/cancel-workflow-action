@@ -86,17 +86,14 @@ async function main() {
             .reduce((a, b) => Math.max(a, b), cancelBefore.getTime());
           cancelBefore = new Date(n);
         }
-        const runningWorkflows = workflow_runs.filter(
-          run =>
-            run.head_repository.id === trigger_repo_id &&
-            run.id !== current_run.id &&
-            (ignore_sha || run.head_sha !== headSha) &&
-            run.status !== 'completed' &&
-            new Date(run.created_at) < cancelBefore,
+        const runningWorkflows = workflow_runs.filter(run =>
+          run.head_repository.id === trigger_repo_id &&
+          run.id !== current_run.id &&
+          (ignore_sha || run.head_sha !== headSha) &&
+          cancel_only_queued
+            ? run.status === 'waiting'
+            : run.status !== 'completed' && new Date(run.created_at) < cancelBefore,
         );
-        if (cancel_only_queued) {
-          runningWorkflows.filter(run => run.status === 'queued');
-        }
         if (all_but_latest && new Date(current_run.created_at) < cancelBefore) {
           // Make sure we cancel this run itself if it's out-of-date.
           // We must cancel this run last so we can cancel the others first.
