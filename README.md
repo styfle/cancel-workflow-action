@@ -147,7 +147,7 @@ jobs:
 
 ### Advanced: Skip runs that are in progress
 
-For some workflows it might be dangerous to be canceled if they are in progress. If you want to play safe and cancel only workflows that are paused (in_queue), most likely waiting for approval to be deployed in a protected environment use `cancel_only_queued` 
+For some workflows it might be dangerous to be canceled if they are in progress. If you want to play safe and cancel only workflows that are in state `waiting`, most likely waiting for approval to be deployed in a protected environment, use `cancel_only_queued`. 
 
 ```yml
 name: Cancel
