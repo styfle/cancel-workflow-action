@@ -21,7 +21,7 @@ inputs:
     required: false
     default: 'false'
   cancel_only_queued:
-    description: "Cancel only 'queued' runs (with steps waiting for approval), skip the ones that are in progress (safer)"
+    description: "Cancel only `waiting` runs (waiting for approval), skip the ones that are `in_progress` (safer)"
     required: false
     default: 'false'
 runs:
