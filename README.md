@@ -147,7 +147,7 @@ jobs:
 
 ### Advanced: Skip runs that are in progress
 
-For some workflows it might be dangerous to be canceled if they are in progress. If you want to play safe and cancel only workflows that are in state `waiting`, most likely waiting for approval to be deployed in a protected environment, use `cancel_only_queued`. 
+Some workflows may be dangerous to cancel when they are in progress. If you want to play safe and cancel only workflows that are in state `waiting`, most likely waiting for approval to be deployed in a protected environment, use `only_status` to only cancel runs with a specific status. 
 
 ```yml
 name: Cancel
@@ -160,7 +160,7 @@ jobs:
     steps:
       - uses: styfle/cancel-workflow-action
         with:
-          cancel_only_queued: true
+          only_status: 'waiting'
 ```
 
 ### Advanced: Token Permissions

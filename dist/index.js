@@ -9706,7 +9706,7 @@ async function main() {
     const workflow_id = core.getInput('workflow_id', { required: false });
     const ignore_sha = core.getBooleanInput('ignore_sha', { required: false });
     const all_but_latest = core.getBooleanInput('all_but_latest', { required: false });
-    const cancel_only_queued = core.getBooleanInput('cancel_only_queued', { required: false });
+    const only_status = core.getInput('only_status', { required: false });
     console.log(`Found token: ${token ? 'yes' : 'no'}`);
     const workflow_ids = [];
     const octokit = github.getOctokit(token);
@@ -9752,9 +9752,8 @@ async function main() {
             const runningWorkflows = workflow_runs.filter(run => run.head_repository.id === trigger_repo_id &&
                 run.id !== current_run.id &&
                 (ignore_sha || run.head_sha !== headSha) &&
-                cancel_only_queued
-                ? run.status === 'waiting'
-                : run.status !== 'completed' && new Date(run.created_at) < cancelBefore);
+                (only_status ? run.status === only_status : run.status !== 'completed') &&
+                new Date(run.created_at) < cancelBefore);
             if (all_but_latest && new Date(current_run.created_at) < cancelBefore) {
                 runningWorkflows.push(current_run);
             }

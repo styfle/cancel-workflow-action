@@ -17,13 +17,12 @@ inputs:
     default: ${{ github.token }}
     required: false
   all_but_latest:
-    description: "Cancel all actions but the last one"
+    description: "Optional - Cancel all actions but the most recent one."
     required: false
     default: 'false'
-  cancel_only_queued:
-    description: "Cancel only `waiting` runs (waiting for approval), skip the ones that are `in_progress` (safer)"
+  only_status:
+    description: "Optional - Cancel runs with a specific status, such as `waiting`."
     required: false
-    default: 'false'
 runs:
   using: 'node16'
   main: 'dist/index.js'
