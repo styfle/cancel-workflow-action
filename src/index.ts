@@ -34,6 +34,7 @@ async function main() {
   const workflow_id = core.getInput('workflow_id', { required: false });
   const ignore_sha = core.getBooleanInput('ignore_sha', { required: false });
   const all_but_latest = core.getBooleanInput('all_but_latest', { required: false });
+  const only_status = core.getInput('only_status', { required: false });
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
   const workflow_ids: string[] = [];
   const octokit = github.getOctokit(token);
@@ -90,7 +91,7 @@ async function main() {
             run.head_repository.id === trigger_repo_id &&
             run.id !== current_run.id &&
             (ignore_sha || run.head_sha !== headSha) &&
-            run.status !== 'completed' &&
+            (only_status ? run.status === only_status : run.status !== 'completed') &&
             new Date(run.created_at) < cancelBefore,
         );
         if (all_but_latest && new Date(current_run.created_at) < cancelBefore) {

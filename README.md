@@ -145,6 +145,24 @@ jobs:
           all_but_latest: true
 ```
 
+### Advanced: Skip runs that are in progress
+
+Some workflows may be dangerous to cancel when they are in progress. If you want to play safe and cancel only workflows that are in state `waiting`, most likely waiting for approval to be deployed in a protected environment, use `only_status` to only cancel runs with a specific status. 
+
+```yml
+name: Cancel
+on: [push]
+jobs:
+  cancel:
+    name: 'Cancel Previous Runs'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: styfle/cancel-workflow-action
+        with:
+          only_status: 'waiting'
+```
+
 ### Advanced: Token Permissions
 
 No change to permissions is required by default. The instructions below are for improved control over of those permissions.
@@ -174,4 +192,5 @@ _Note_ : This is typical when global access is set to be restrictive. Only this 
 - Run `yarn install`
 - Edit `./src/index.ts`
 - Run `yarn build`
+- Run `yarn format`
 - Commit changes including `./dist/index.js` bundle
