@@ -8,10 +8,10 @@ jobs:
     name: Task
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Test Step
         uses: ./ # Uses an action in the root directory
         with:
           access_token: ${{ github.token }}
-      - uses: actions/setup-node@v3.6.0
+      - uses: actions/setup-node@v4
       - run: echo 'Sleeping...'; sleep 120; echo 'Done.';
