@@ -10,7 +10,7 @@ jobs:
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Test Step
         uses: ./ # Uses an action in the root directory
         with:
