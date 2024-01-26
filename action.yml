@@ -12,6 +12,10 @@ inputs:
     description: 'Optional - Allow canceling other workflows with the same SHA. Useful for the `pull_request.closed` event.'
     required: false
     default: 'false'
+  ignore_branch:
+    description: 'Optional - Allow canceling workflows in all branches.'
+    required: false
+    default: 'false'
   access_token:
     description: 'Your GitHub Access Token, defaults to: {{ github.token }}'
     default: ${{ github.token }}

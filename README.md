@@ -54,6 +54,25 @@ Visit [Releases](https://github.com/styfle/cancel-workflow-action/releases) to f
 > 
 > You might run into "the `uses' attribute must be a path, a Docker image, or owner/repo@ref" error if you don't specify a version.
 
+### Advanced: Canceling Workflows for Other Branches
+
+By default, this action cancels workflows running in the same branch as itself. The `ignore_branch` flag allows to ignore the branch name when selecting workflows to cancel.
+
+```yml
+name: Cancel
+on: [push]
+jobs:
+  test:
+    name: 'Cancel Previous Runs'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: styfle/cancel-workflow-action
+        with:
+          ignore_branch: true
+```
+
+
 ### Advanced: Canceling Other Workflows
 
 In some cases, you may wish to avoid modifying all your workflows and instead create a new workflow that cancels your other workflows. This can be useful when you have a problem with workflows getting queued.
