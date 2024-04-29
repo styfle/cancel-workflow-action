@@ -1,4 +1,4 @@
-> **Warning**
+> [!IMPORTANT]
 > You probably don't need to install this custom action.
 > 
 > Instead, use the native [concurrency](https://github.blog/changelog/2021-04-19-github-actions-limit-workflow-run-or-job-concurrency/) property to cancel workflows, for example:
