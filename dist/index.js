@@ -9742,6 +9742,7 @@ async function main() {
                 branch,
             });
             console.log(`Found ${total_count} runs total.`);
+            console.log(`::debug: Workflows:`, workflow_runs);
             let cancelBefore = new Date(current_run.created_at);
             if (all_but_latest) {
                 const n = workflow_runs
@@ -9758,6 +9759,7 @@ async function main() {
                 runningWorkflows.push(current_run);
             }
             console.log(`Found ${runningWorkflows.length} runs to cancel.`);
+            console.log(`::debug: Workflows:`, runningWorkflows);
             for (const { id, head_sha, status, html_url } of runningWorkflows) {
                 console.log('Canceling run: ', { id, head_sha, status, html_url });
                 const res = await octokit.rest.actions.cancelWorkflowRun({
