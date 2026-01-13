@@ -35,6 +35,7 @@ async function main() {
   const ignore_sha = core.getBooleanInput('ignore_sha', { required: false });
   const all_but_latest = core.getBooleanInput('all_but_latest', { required: false });
   const only_status = core.getInput('only_status', { required: false });
+  const force_cancel = core.getBooleanInput('force_cancel', { required: false });
   console.log(`Found token: ${token ? 'yes' : 'no'}`);
   const workflow_ids: string[] = [];
   const octokit = github.getOctokit(token);
@@ -102,11 +103,17 @@ async function main() {
         console.log(`Found ${runningWorkflows.length} runs to cancel.`);
         for (const { id, head_sha, status, html_url } of runningWorkflows) {
           console.log('Canceling run: ', { id, head_sha, status, html_url });
-          const res = await octokit.rest.actions.cancelWorkflowRun({
-            owner,
-            repo,
-            run_id: id,
-          });
+          const res = force_cancel
+            ? await octokit.rest.actions.forceCancelWorkflowRun({
+                owner,
+                repo,
+                run_id: id,
+              })
+            : await octokit.rest.actions.cancelWorkflowRun({
+                owner,
+                repo,
+                run_id: id,
+              });
           console.log(`Cancel run ${id} responded with status ${res.status}`);
         }
       } catch (e: any) {
