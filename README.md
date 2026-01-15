@@ -165,7 +165,7 @@ jobs:
 
 ### Advanced: Force cancel
 
-Cancels a workflow run and bypasses conditions that would otherwise cause a workflow execution to continue, such as an `always()` condition on a job. Only use this if normal cancel does not work.
+Cancels a workflow run and bypasses conditions that would otherwise cause a workflow execution to continue, such as an `always()` condition or jobs in the Waiting For Approval state.
 
 ```yml
 name: Cancel
