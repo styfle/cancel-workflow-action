@@ -23,6 +23,10 @@ inputs:
   only_status:
     description: "Optional - Cancel runs with a specific status, such as `waiting`."
     required: false
+  force_cancel:
+    description: "Optional - Force cancel the workflow runs instead of gracefully canceling."
+    required: false
+    default: 'false'
 runs:
   using: 'node20'
   main: 'dist/index.js'
