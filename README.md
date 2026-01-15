@@ -163,6 +163,24 @@ jobs:
           only_status: 'waiting'
 ```
 
+### Advanced: Force cancel
+
+Cancels a workflow run and bypasses conditions that would otherwise cause a workflow execution to continue, such as an `always()` condition on a job. Only use this if normal cancel does not work.
+
+```yml
+name: Cancel
+on: [push]
+jobs:
+  cancel:
+    name: 'Cancel Previous Runs'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: styfle/cancel-workflow-action
+        with:
+          force_cancel: true
+```
+
 ### Advanced: Token Permissions
 
 No change to permissions is required by default. The instructions below are for improved control over of those permissions.
