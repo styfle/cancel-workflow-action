@@ -30253,6 +30253,7 @@ async function main() {
     const token = core.getInput('access_token');
     const workflow_id = core.getInput('workflow_id', { required: false });
     const ignore_sha = core.getBooleanInput('ignore_sha', { required: false });
+    const ignore_branch = core.getBooleanInput('ignore_branch', { required: false });
     const all_but_latest = core.getBooleanInput('all_but_latest', { required: false });
     const only_status = core.getInput('only_status', { required: false });
     const force_cancel = core.getBooleanInput('force_cancel', { required: false });
@@ -30288,7 +30289,7 @@ async function main() {
                 owner,
                 repo,
                 workflow_id,
-                branch,
+                branch: ignore_branch ? undefined : branch,
             });
             console.log(`Found ${total_count} runs total.`);
             let cancelBefore = new Date(current_run.created_at);
