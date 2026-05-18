@@ -69,17 +69,21 @@ async function main() {
   await Promise.all(
     workflow_ids.map(async workflow_id => {
       try {
-        const {
-          data: { total_count, workflow_runs },
-        } = await octokit.rest.actions.listWorkflowRuns({
+        const listWorkflowRunsParams: any = {
           per_page: 100,
           owner,
           repo,
-          // @ts-ignore
           workflow_id,
           branch,
-        });
-        console.log(`Found ${total_count} runs total.`);
+        };
+        if (only_status && !all_but_latest) {
+          listWorkflowRunsParams.status = only_status;
+        }
+        const workflow_runs: any[] = await octokit.paginate(
+          octokit.rest.actions.listWorkflowRuns,
+          listWorkflowRunsParams,
+        );
+        console.log(`Found ${workflow_runs.length} runs total.`);
         let cancelBefore = new Date(current_run.created_at);
         if (all_but_latest) {
           const n = workflow_runs
